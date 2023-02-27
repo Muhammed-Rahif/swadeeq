@@ -47,9 +47,9 @@
   },
   "scripts": {
     "start": "set TAILWIND_MODE=watch && react-scripts start",
-    "build": "craco build",
+    "build": "react-scripts build",
     "ionic:serve": "set TAILWIND_MODE=watch && react-scripts start",
-    "ionic:build": "craco build",
+    "ionic:build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
     "eject": "react-scripts eject"
   },

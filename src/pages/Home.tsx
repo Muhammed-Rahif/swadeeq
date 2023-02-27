@@ -31,7 +31,7 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen>
-        <article className="p-3 prose lg:prose-lg h-full">
+        <article data-theme="luxury" className="p-3 prose lg:prose-lg h-full">
           <div className="flex justify-center h-full flex-col items-center">
             <h3 className="mb-0">Dear</h3>
             <h1>
