@@ -1,0 +1,7 @@
+{
+  "name": "faithful-muslim",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
