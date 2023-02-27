@@ -12,6 +12,7 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { ellipse, square, triangle } from "ionicons/icons";
 import Home from "./pages/Home";
+import { BiHomeAlt } from "react-icons/bi";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -39,11 +40,25 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/">
-          <Home />
-        </Route>
-      </IonRouterOutlet>
+      <div data-theme="cofee">
+        <IonRouterOutlet>
+          <Route exact path="/">
+            <Home />
+          </Route>
+        </IonRouterOutlet>
+
+        <div className="btm-nav">
+          <button>
+            <BiHomeAlt />
+          </button>
+          <button className="active">
+            <BiHomeAlt />
+          </button>
+          <button>
+            <BiHomeAlt />
+          </button>
+        </div>
+      </div>
     </IonReactRouter>
   </IonApp>
 );
