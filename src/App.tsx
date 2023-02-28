@@ -8,11 +8,11 @@ import {
   IonTabButton,
   IonTabs,
   setupIonicReact,
+  IonRouterLink,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { ellipse, square, triangle } from "ionicons/icons";
-import Home from "./pages/Home";
-import { BiHomeAlt } from "react-icons/bi";
+import PrayerTimes from "./pages/PrayerTimes";
+import Dhikrs from "./pages/Dhikrs";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -32,32 +32,25 @@ import "@ionic/react/css/display.css";
 
 /* Tailwind styles */
 import "./theme/tailwind.css";
+import BottomNav from "./components/BottomNav";
 /* Theme variables */
-import "./theme/variables.css";
+// import "./theme/variables.css";
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <div data-theme="cofee">
+      <div data-theme="luxury">
         <IonRouterOutlet>
           <Route exact path="/">
-            <Home />
+            <Redirect to="/dhikrs" />
           </Route>
+          <Route path="/prayer-times" component={PrayerTimes} />
+          <Route path="/dhikrs" component={Dhikrs} />
         </IonRouterOutlet>
 
-        <div className="btm-nav">
-          <button>
-            <BiHomeAlt />
-          </button>
-          <button className="active">
-            <BiHomeAlt />
-          </button>
-          <button>
-            <BiHomeAlt />
-          </button>
-        </div>
+        <BottomNav />
       </div>
     </IonReactRouter>
   </IonApp>

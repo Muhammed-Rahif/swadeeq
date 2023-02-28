@@ -3,10 +3,11 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { getPrayerTimeApiUrl } from "../constants/api";
 import { PrayerTimeType, Timings } from "../types/PrayerTimeType";
-import { useGeolocated } from "react-geolocated";
 import { Geolocation } from "@capacitor/geolocation";
 
-const Home: React.FC = () => {
+// =================== UNDERGOING DEVELOPMENT ===================
+
+const PrayerTimes: React.FC = () => {
   const [min, setMin] = useState(1);
   const [sec, setSec] = useState(60);
 
@@ -146,4 +147,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default PrayerTimes;
