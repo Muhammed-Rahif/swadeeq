@@ -41,7 +41,7 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <div data-theme="luxury">
+      <div data-theme="lemonade" className="">
         <IonRouterOutlet>
           <Route exact path="/">
             <Redirect to="/dhikrs" />

@@ -1,20 +1,25 @@
-import { IonRouterLink, useIonRouter } from "@ionic/react";
-import { BiHomeAlt } from "react-icons/bi";
+import {
+  IonFooter,
+  IonRouterLink,
+  IonToolbar,
+  useIonRouter,
+} from "@ionic/react";
+import { IoSettingsSharp, IoHome, IoHeart } from "react-icons/io5";
 
 interface BottomNavProps {}
 
 const navs = [
   {
     path: "/dhikrs",
-    icon: <BiHomeAlt />,
+    icon: <IoHome />,
   },
   {
     path: "/some",
-    icon: <BiHomeAlt />,
+    icon: <IoHeart />,
   },
   {
-    path: "/another",
-    icon: <BiHomeAlt />,
+    path: "/settings",
+    icon: <IoSettingsSharp />,
   },
 ];
 
