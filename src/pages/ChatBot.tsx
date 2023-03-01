@@ -16,14 +16,15 @@ import React, {
 } from "react";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
-import { MdOutlineKeyboardVoice } from "react-icons/md";
+import { MdContactless, MdOutlineKeyboardVoice } from "react-icons/md";
+import RiveScript from "rivescript";
 
-const userChatAnime: Variants = {
+const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
   animate: { x: 0, opacity: 1, scale: 1 },
 };
 
-const botChatAnime: Variants = {
+const userChatAnime: Variants = {
   initial: { x: "10%", opacity: 0, scale: 1.068 },
   animate: { x: 0, opacity: 1, scale: 1 },
 };
@@ -111,6 +112,38 @@ const ChatBot: React.FC = () => {
     contentRef.current?.scrollToBottom(500);
   }, [chats]);
 
+  useEffect(() => {
+    const bot = new RiveScript();
+
+    bot
+      .loadFile(["../brain/main.rive"])
+      .then(loading_done)
+      .catch(loading_error as any);
+
+    function loading_done() {
+      console.log("Bot has finished loading!");
+
+      // Now the replies must be sorted!
+      bot.sortReplies();
+
+      // And now we're free to get a reply from the brain!
+
+      // RiveScript remembers user data by their username and can tell
+      // multiple users apart.
+      let username = "local-user";
+
+      // NOTE: the API has changed in v2.0.0 and returns a Promise now.
+      bot.reply(username, "Hello, bot!").then(function (reply) {
+        console.log("The bot says: " + reply);
+      });
+    }
+
+    // It's good to catch errors too!
+    function loading_error(error: string, filename: any, lineno: any) {
+      console.log("Error when loading files: " + error);
+    }
+  }, []);
+
   return (
     <IonPage>
       <IonContent
@@ -124,16 +157,17 @@ const ChatBot: React.FC = () => {
 
           return by === "bot" ? (
             <motion.div
-              variants={userChatAnime}
+              key={indx}
+              variants={botChatAnime}
               initial="initial"
               animate="animate"
-              transition={{ duration: 0.3, ease: "circOut" }}
-              className={`chat gap-0 duration-300 chat-start ${
+              transition={{ duration: 0.2, ease: "circOut" }}
+              className={`chat gap-0 duration-200 chat-start ${
                 isLastChatByBot ? "pb-0" : ""
               }`}
             >
               <div
-                className={`chat-bubble rounded-3xl duration-300 bg-white/30 before:hidden ${
+                className={`chat-bubble rounded-3xl duration-200 bg-white/30 before:hidden ${
                   isLastChatByBot ? "!rounded-bl-3xl mb-0" : ""
                 }`}
               >
@@ -142,16 +176,17 @@ const ChatBot: React.FC = () => {
             </motion.div>
           ) : (
             <motion.div
-              variants={botChatAnime}
+              key={indx}
+              variants={userChatAnime}
               initial="initial"
               animate="animate"
-              transition={{ duration: 0.3, ease: "circOut" }}
-              className={`chat gap-0 chat-end duration-300 ease-linear ${
+              transition={{ duration: 0.2, ease: "circOut" }}
+              className={`chat gap-0 chat-end duration-200 ease-linear ${
                 isLastChatByUser ? "pb-0" : ""
               }`}
             >
               <div
-                className={`chat-bubble bg-gradient-to-r duration-300 ease-linear text-black from-orange-300 to-green-100 rounded-3xl before:hidden ${
+                className={`chat-bubble duration-200 ease-linear text-black bg-gradient-to-r from-orange-300 to-green-100 rounded-3xl before:hidden ${
                   isLastChatByUser ? "!rounded-br-3xl mb-0" : ""
                 }`}
               >
@@ -169,7 +204,11 @@ const ChatBot: React.FC = () => {
             placeholder="Say assalamu alaikum..."
             rows={1}
             ref={textBox}
-            onFocus={() => contentRef.current?.scrollToBottom(500)}
+            onFocus={() =>
+              setTimeout(() => {
+                contentRef.current?.scrollToBottom(500);
+              }, 250)
+            }
           ></textarea>
 
           <div className="flex items-start">

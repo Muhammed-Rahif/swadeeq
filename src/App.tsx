@@ -42,7 +42,7 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <div data-theme="halloween" className="">
+      <div data-theme="black" className="">
         <IonRouterOutlet>
           <Route exact path="/">
             <Redirect to="/chat-bot" />
