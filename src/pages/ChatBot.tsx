@@ -19,13 +19,13 @@ import { RiSendPlane2Line } from "react-icons/ri";
 import { MdOutlineKeyboardVoice } from "react-icons/md";
 
 const userChatAnime: Variants = {
-  initial: { y: "-10%", opacity: 0, scale: 1.068 },
-  animate: { y: 0, opacity: 1, scale: 1 },
+  initial: { x: "-10%", opacity: 0, scale: 1.068 },
+  animate: { x: 0, opacity: 1, scale: 1 },
 };
 
 const botChatAnime: Variants = {
-  initial: { y: "10%", opacity: 0, scale: 1.068 },
-  animate: { y: 0, opacity: 1, scale: 1 },
+  initial: { x: "10%", opacity: 0, scale: 1.068 },
+  animate: { x: 0, opacity: 1, scale: 1 },
 };
 
 type ChatsType = {
@@ -100,6 +100,11 @@ const ChatBot: React.FC = () => {
         by: "user",
         message: textBox.current.value,
       },
+      //   {
+      //     id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+      //     by: "bot",
+      //     message: textBox.current.value,
+      //   },
     ]);
     textBox.current.focus();
     textBox.current.value = "";
@@ -113,20 +118,23 @@ const ChatBot: React.FC = () => {
         className="ion-padding ![background:transparent]"
         ref={contentRef}
       >
-        {chats.map(({ by, id, message }, indx) =>
-          by === "bot" ? (
+        {chats.map(({ by, id, message }, indx) => {
+          const isLastChatByBot = chats[indx + 1]?.by === "bot";
+          const isLastChatByUser = chats[indx + 1]?.by === "user";
+
+          return by === "bot" ? (
             <motion.div
               variants={userChatAnime}
               initial="initial"
               animate="animate"
-              transition={{ duration: 1, ease: "circOut" }}
+              transition={{ duration: 0.3, ease: "circOut" }}
               className={`chat gap-0 duration-300 chat-start ${
-                chats[indx + 1]?.by === "bot" ? "pb-0" : ""
+                isLastChatByBot ? "pb-0" : ""
               }`}
             >
               <div
                 className={`chat-bubble rounded-3xl duration-300 bg-white/30 before:hidden ${
-                  chats[indx + 1]?.by === "bot" ? "!rounded-bl-3xl mb-0" : ""
+                  isLastChatByBot ? "!rounded-bl-3xl mb-0" : ""
                 }`}
               >
                 {message}
@@ -137,21 +145,21 @@ const ChatBot: React.FC = () => {
               variants={botChatAnime}
               initial="initial"
               animate="animate"
-              transition={{ duration: 1, ease: "circOut" }}
+              transition={{ duration: 0.3, ease: "circOut" }}
               className={`chat gap-0 chat-end duration-300 ease-linear ${
-                chats[indx + 1]?.by === "user" ? "pb-0" : ""
+                isLastChatByUser ? "pb-0" : ""
               }`}
             >
               <div
                 className={`chat-bubble bg-gradient-to-r duration-300 ease-linear text-black from-orange-300 to-green-100 rounded-3xl before:hidden ${
-                  chats[indx + 1]?.by === "user" ? "!rounded-br-3xl mb-0" : ""
+                  isLastChatByUser ? "!rounded-br-3xl mb-0" : ""
                 }`}
               >
                 {message}
               </div>
             </motion.div>
-          )
-        )}
+          );
+        })}
       </IonContent>
 
       <IonFooter className="bg-[hsla(var(--b1)/var(--tw-bg-opacity,1))] pb-4 px-2">
