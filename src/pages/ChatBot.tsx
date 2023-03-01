@@ -19,13 +19,13 @@ import { RiSendPlane2Line } from "react-icons/ri";
 import { MdOutlineKeyboardVoice } from "react-icons/md";
 
 const userChatAnime: Variants = {
-  initial: { x: "-100%", opacity: 0, scale: 1.08 },
-  animate: { x: 0, opacity: 1, scale: 1 },
+  initial: { y: "-10%", opacity: 0, scale: 1.068 },
+  animate: { y: 0, opacity: 1, scale: 1 },
 };
 
 const botChatAnime: Variants = {
-  initial: { x: "100%", opacity: 0, scale: 1.08 },
-  animate: { x: 0, opacity: 1, scale: 1 },
+  initial: { y: "10%", opacity: 0, scale: 1.068 },
+  animate: { y: 0, opacity: 1, scale: 1 },
 };
 
 type ChatsType = {
@@ -88,22 +88,23 @@ const chatsData: ChatsType = [
 
 const ChatBot: React.FC = () => {
   const [chats, setChats] = useState(chatsData);
-  const [userTxtBox, setUserTxtBox] = useState("");
+  const textBox = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLIonContentElement>(null);
 
   const onUserInput = useCallback(() => {
+    if (!textBox.current?.value) return textBox.current?.focus();
     setChats([
       ...chats,
       {
         id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
         by: "user",
-        message: userTxtBox,
+        message: textBox.current.value,
       },
     ]);
-    setUserTxtBox("");
+    textBox.current.focus();
+    textBox.current.value = "";
     contentRef.current?.scrollToBottom(500);
-    // focus textarea
-  }, [chats, userTxtBox]);
+  }, [chats]);
 
   return (
     <IonPage>
@@ -118,7 +119,7 @@ const ChatBot: React.FC = () => {
               variants={userChatAnime}
               initial="initial"
               animate="animate"
-              transition={{ duration: 1, ease: "anticipate" }}
+              transition={{ duration: 1, ease: "circOut" }}
               className={`chat gap-0 duration-300 chat-start ${
                 chats[indx + 1]?.by === "bot" ? "pb-0" : ""
               }`}
@@ -136,13 +137,13 @@ const ChatBot: React.FC = () => {
               variants={botChatAnime}
               initial="initial"
               animate="animate"
-              transition={{ duration: 1, ease: "anticipate" }}
-              className={`chat gap-0 chat-end ${
+              transition={{ duration: 1, ease: "circOut" }}
+              className={`chat gap-0 chat-end duration-300 ease-linear ${
                 chats[indx + 1]?.by === "user" ? "pb-0" : ""
               }`}
             >
               <div
-                className={`chat-bubble bg-gradient-to-r text-black from-orange-300 to-green-100 rounded-3xl before:hidden ${
+                className={`chat-bubble bg-gradient-to-r duration-300 ease-linear text-black from-orange-300 to-green-100 rounded-3xl before:hidden ${
                   chats[indx + 1]?.by === "user" ? "!rounded-br-3xl mb-0" : ""
                 }`}
               >
@@ -156,11 +157,10 @@ const ChatBot: React.FC = () => {
       <IonFooter className="bg-[hsla(var(--b1)/var(--tw-bg-opacity,1))] pb-4 px-2">
         <div className="flex items-stretch justify-between pt-2">
           <textarea
-            className="textarea rounded-2xl w-full"
+            className="textarea rounded-2xl w-full mr-1 font-bold"
             placeholder="Say assalamu alaikum..."
             rows={1}
-            value={userTxtBox}
-            onChange={(e) => setUserTxtBox(e.target.value)}
+            ref={textBox}
             onFocus={() => contentRef.current?.scrollToBottom(500)}
           ></textarea>
 
