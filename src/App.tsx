@@ -33,6 +33,7 @@ import "@ionic/react/css/display.css";
 /* Tailwind styles */
 import "./theme/tailwind.css";
 import BottomNav from "./components/BottomNav";
+import ChatBot from "./pages/ChatBot";
 /* Theme variables */
 // import "./theme/variables.css";
 
@@ -41,16 +42,17 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <div data-theme="lemonade" className="">
+      <div data-theme="halloween" className="">
         <IonRouterOutlet>
           <Route exact path="/">
-            <Redirect to="/dhikrs" />
+            <Redirect to="/chat-bot" />
           </Route>
           <Route path="/prayer-times" component={PrayerTimes} />
           <Route path="/dhikrs" component={Dhikrs} />
+          <Route path="/chat-bot" component={ChatBot} />
         </IonRouterOutlet>
 
-        <BottomNav />
+        {/* <BottomNav /> */}
       </div>
     </IonReactRouter>
   </IonApp>
