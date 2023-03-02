@@ -109,7 +109,7 @@ const ChatBot: React.FC = () => {
             className="w-40 h-auto"
           />
 
-          <div className="divider text-gray-400">
+          <div className="divider text-gray-400 py-5">
             <small className="text-xs">
               In the name of Allah,
               <br /> the Entirely Merciful the Especially Merciful
@@ -183,28 +183,24 @@ const ChatBot: React.FC = () => {
       </IonContent>
 
       <IonFooter className="bg-[hsla(var(--b1)/var(--tw-bg-opacity,1))] pb-4 px-2">
-        <div className="flex items-stretch justify-between pt-2">
-          <textarea
-            className="textarea rounded-2xl w-full mr-1 font-bold"
-            placeholder="Say assalamu alaikum..."
-            rows={1}
-            ref={textBox}
-            onFocus={() =>
-              setTimeout(() => {
-                contentRef.current?.scrollToBottom(500);
-              }, 250)
-            }
-          ></textarea>
+        <div className="flex items-stretch justify-between pt-2 form-control">
+          <div className="input-group">
+            <textarea
+              className="textarea !rounded-l-2xl w-full !outline !outline-base-200 mr-1 font-bold"
+              placeholder="Say assalamu alaikum..."
+              rows={1}
+              ref={textBox}
+              onFocus={() =>
+                setTimeout(() => {
+                  contentRef.current?.scrollToBottom(500);
+                }, 250)
+              }
+            ></textarea>
 
-          <div className="flex items-start">
-            <button className="btn bg-transparent px-5 rounded-2xl">
-              <MdOutlineKeyboardVoice size={22} />
-            </button>
-            <div className="divider divider-horizontal m-0 h-8 my-auto p-0 w-0 opacity-75" />
             <button
               onClick={onUserInput}
               ref={submitBtnRef}
-              className="btn bg-transparent px-5 rounded-2xl"
+              className="btn bg-transparent px-5 !outline !outline-base-200 !rounded-r-2xl"
             >
               <RiSendPlane2Line size={18} />
             </button>
