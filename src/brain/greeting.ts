@@ -1,6 +1,6 @@
+const greetings = `
 ! version = 2.0
 
-+ hello bot
 + assalamu alaikum
 - Hello human.
 - Wa alaikum ssalam
@@ -14,3 +14,6 @@
 + *
 - I don't have a reply for that.
 - Try asking that a different way.
+`;
+
+export default greetings;

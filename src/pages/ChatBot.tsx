@@ -18,6 +18,7 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { MdContactless, MdOutlineKeyboardVoice } from "react-icons/md";
 import RiveScript from "rivescript";
+import greetings from "../brain/greeting";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -35,97 +36,33 @@ type ChatsType = {
   message: string;
 }[];
 
-const bot = new RiveScript();
-
-bot
-  .loadFile(["brain/main.rive"])
-  .then(loading_done)
-  .catch(loading_error as any);
-
-function loading_done(val: any) {
-  console.log(val);
-
-  console.log("Bot has finished loading!");
-
-  // Now the replies must be sorted!
-  bot.sortReplies();
-
-  // And now we're free to get a reply from the brain!
-
-  // RiveScript remembers user data by their username and can tell
-  // multiple users apart.
-  let username = "local-user";
-
-  // NOTE: the API has changed in v2.0.0 and returns a Promise now.
-  bot.reply(username, "hello bot").then(function (reply) {
-    console.log("The bot says: " + reply);
-  });
-}
-
-// It's good to catch errors too!
-function loading_error(error: string, filename: any, lineno: any) {
-  console.log("Error when loading files: " + error);
-}
-
-const chatsData: ChatsType = [
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "bot",
-    message: "Assalamu alaikum, how can I help you?",
-  },
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "user",
-    message:
-      "Tell me about the Prophet Muhammad (peace be upon him) and his companions.",
-  },
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "bot",
-    message:
-      "Prophet Muhammad (peace be upon him) was born in Mecca. He is the last prophet of Allah. Every prophet before him was sent to a specific people. But Prophet Muhammad (peace be upon him) was sent to all of mankind.",
-  },
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "user",
-    message: "Oh, I see. What was his mission?",
-  },
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "user",
-    message: "I like to know more about him.",
-  },
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "bot",
-    message:
-      "He was sent to teach people how to worship Allah and to live a good life. He was sent to teach people how to be good to each other. He was sent to teach people how to be good to their parents, their children, their neighbors, and their friends.",
-  },
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "bot",
-    message:
-      "He was sent to teach people how to be good to animals and to the earth. He was sent to teach people how to be good to themselves. He was sent to teach people how to be good to their enemies. He was sent to teach people how to be good to their rulers.",
-  },
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "user",
-    message: "Thanks for the information. I will read more about him.",
-  },
-  {
-    id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-    by: "bot",
-    message: "You are welcome. May Allah bless you.",
-  },
-];
-
 const ChatBot: React.FC = () => {
-  const [chats, setChats] = useState(chatsData);
+  const [chats, setChats] = useState([] as ChatsType);
   const textBox = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLIonContentElement>(null);
+  const [bot, setBot] = useState<RiveScript>();
 
-  const onUserInput = useCallback(() => {
+  useEffect(() => {
+    const bot = new RiveScript();
+
+    bot
+      .loadFile(["/assets/brain/greetings.rive"])
+      .then(() => {
+        bot.sortReplies();
+
+        setBot(bot);
+      })
+      .catch(console.error);
+  }, []);
+
+  const onUserInput = useCallback(async () => {
+    if (!bot) return;
     if (!textBox.current?.value) return textBox.current?.focus();
+
+    const botReply = await bot
+      .reply("local-user", textBox.current?.value || "Nothing to say")
+      .catch(console.error);
+
     setChats([
       ...chats,
       {
@@ -133,24 +70,16 @@ const ChatBot: React.FC = () => {
         by: "user",
         message: textBox.current.value,
       },
-      //   {
-      //     id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-      //     by: "bot",
-      //     message: textBox.current.value,
-      //   },
+      {
+        by: "bot",
+        id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+        message: botReply ?? "I am having some technical difficulties",
+      },
     ]);
     textBox.current.focus();
     textBox.current.value = "";
     contentRef.current?.scrollToBottom(500);
-  }, [chats]);
-
-  useEffect(() => {
-    bot.sortReplies();
-
-    bot.reply("sa", "hi").then((reply) => {
-      console.log(reply);
-    });
-  }, []);
+  }, [bot, chats]);
 
   return (
     <IonPage>
