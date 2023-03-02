@@ -35,6 +35,38 @@ type ChatsType = {
   message: string;
 }[];
 
+const bot = new RiveScript();
+
+bot
+  .loadFile(["brain/main.rive"])
+  .then(loading_done)
+  .catch(loading_error as any);
+
+function loading_done(val: any) {
+  console.log(val);
+
+  console.log("Bot has finished loading!");
+
+  // Now the replies must be sorted!
+  bot.sortReplies();
+
+  // And now we're free to get a reply from the brain!
+
+  // RiveScript remembers user data by their username and can tell
+  // multiple users apart.
+  let username = "local-user";
+
+  // NOTE: the API has changed in v2.0.0 and returns a Promise now.
+  bot.reply(username, "hello bot").then(function (reply) {
+    console.log("The bot says: " + reply);
+  });
+}
+
+// It's good to catch errors too!
+function loading_error(error: string, filename: any, lineno: any) {
+  console.log("Error when loading files: " + error);
+}
+
 const chatsData: ChatsType = [
   {
     id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
@@ -113,35 +145,11 @@ const ChatBot: React.FC = () => {
   }, [chats]);
 
   useEffect(() => {
-    const bot = new RiveScript();
+    bot.sortReplies();
 
-    bot
-      .loadFile(["../brain/main.rive"])
-      .then(loading_done)
-      .catch(loading_error as any);
-
-    function loading_done() {
-      console.log("Bot has finished loading!");
-
-      // Now the replies must be sorted!
-      bot.sortReplies();
-
-      // And now we're free to get a reply from the brain!
-
-      // RiveScript remembers user data by their username and can tell
-      // multiple users apart.
-      let username = "local-user";
-
-      // NOTE: the API has changed in v2.0.0 and returns a Promise now.
-      bot.reply(username, "Hello, bot!").then(function (reply) {
-        console.log("The bot says: " + reply);
-      });
-    }
-
-    // It's good to catch errors too!
-    function loading_error(error: string, filename: any, lineno: any) {
-      console.log("Error when loading files: " + error);
-    }
+    bot.reply("sa", "hi").then((reply) => {
+      console.log(reply);
+    });
   }, []);
 
   return (
