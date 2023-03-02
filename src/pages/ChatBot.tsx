@@ -18,6 +18,7 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { MdContactless, MdOutlineKeyboardVoice } from "react-icons/md";
 import RiveScript from "rivescript";
+import { TypeAnimation } from "react-type-animation";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -41,6 +42,7 @@ const ChatBot: React.FC = () => {
   const contentRef = useRef<HTMLIonContentElement>(null);
   const submitBtnRef = useRef<HTMLButtonElement>(null);
   const [bot, setBot] = useState<RiveScript>();
+  const [isBotTyping, setIsBotTyping] = useState(false);
 
   useEffect(() => {
     const bot = new RiveScript();
@@ -74,15 +76,23 @@ const ChatBot: React.FC = () => {
         by: "user",
         message: textBox.current.value,
       },
-      {
-        by: "bot",
-        id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-        message: botReply ?? "I am having some technical difficulties",
-      },
     ]);
+    setIsBotTyping(true);
     textBox.current.focus();
     textBox.current.value = "";
     contentRef.current?.scrollToBottom(500);
+
+    setTimeout(() => {
+      setChats((chats) => [
+        ...chats,
+        {
+          by: "bot",
+          id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+          message: botReply ?? "I am having some technical difficulties",
+        },
+      ]);
+      setIsBotTyping(false);
+    }, 2260);
   }, [bot, chats]);
 
   return (
@@ -92,6 +102,21 @@ const ChatBot: React.FC = () => {
         className="ion-padding ![background:transparent]"
         ref={contentRef}
       >
+        <div className="my-3 w-full flex items-center flex-col justify-center text-center">
+          <img
+            src="/assets/images/subhan-allah-word-arabic-calligraphy-art.png"
+            alt="Subhanallah"
+            className="w-40 h-auto"
+          />
+
+          <div className="divider text-gray-400">
+            <small className="text-xs">
+              In the name of Allah,
+              <br /> the Entirely Merciful the Especially Merciful
+            </small>
+          </div>
+        </div>
+
         {chats.map(({ by, id, message }, indx) => {
           const isLastChatByBot = chats[indx + 1]?.by === "bot";
           const isLastChatByUser = chats[indx + 1]?.by === "user";
@@ -136,6 +161,25 @@ const ChatBot: React.FC = () => {
             </motion.div>
           );
         })}
+
+        {isBotTyping && (
+          <motion.div
+            variants={botChatAnime}
+            initial="initial"
+            animate="animate"
+            transition={{ duration: 0.2, ease: "circOut" }}
+            className="chat gap-0 duration-200 chat-start"
+          >
+            <div className="chat-bubble rounded-3xl duration-200 bg-white/30 before:hidden !rounded-bl-3xl mb-0">
+              <TypeAnimation
+                sequence={["Typing...", 500, "Typi", 500]}
+                wrapper="span"
+                cursor={false}
+                repeat={Infinity}
+              />
+            </div>
+          </motion.div>
+        )}
       </IonContent>
 
       <IonFooter className="bg-[hsla(var(--b1)/var(--tw-bg-opacity,1))] pb-4 px-2">

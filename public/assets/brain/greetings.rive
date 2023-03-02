@@ -1,6 +1,17 @@
-+ hello bot
++ (hello bot|hi|helo|hey|hi bot|hello|hi there|hello there|hi)
 - Hello human!
 - Hello!
 - Hi there!
 - Hey!
 - Hi!
+
++ (salam|assalamualai|assalamu alaikum)
+- Salam!
+- Wa alaikum assalam!
+- Peace be upon you!
+- May peace be upon you too!
+
++ (how are you|how are you doing)
+- I'm fine, thanks!
+- I'm doing great!
+- I'm doing well, thank you!
