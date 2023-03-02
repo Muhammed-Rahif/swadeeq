@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">faithful-muslim</string>
-    <string name="title_activity_main">faithful-muslim</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">Swadeeq</string>
+    <string name="title_activity_main">Swadeeq</string>
+    <string name="package_name">tech.rahif.swadeeq</string>
+    <string name="custom_url_scheme">tech.rahif.swadeeq</string>
 </resources>

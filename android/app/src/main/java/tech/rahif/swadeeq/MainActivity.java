@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package tech.rahif.swadeeq;
 
 import com.getcapacitor.BridgeActivity;
 
