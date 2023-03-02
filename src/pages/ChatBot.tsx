@@ -18,7 +18,6 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { MdContactless, MdOutlineKeyboardVoice } from "react-icons/md";
 import RiveScript from "rivescript";
-import greetings from "../brain/greeting";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -40,6 +39,7 @@ const ChatBot: React.FC = () => {
   const [chats, setChats] = useState([] as ChatsType);
   const textBox = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLIonContentElement>(null);
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
   const [bot, setBot] = useState<RiveScript>();
 
   useEffect(() => {
@@ -51,6 +51,10 @@ const ChatBot: React.FC = () => {
         bot.sortReplies();
 
         setBot(bot);
+
+        if (!textBox.current) return;
+        textBox.current.value = "Hello bot";
+        submitBtnRef.current?.click();
       })
       .catch(console.error);
   }, []);
@@ -155,6 +159,7 @@ const ChatBot: React.FC = () => {
             <div className="divider divider-horizontal m-0 h-8 my-auto p-0 w-0 opacity-75" />
             <button
               onClick={onUserInput}
+              ref={submitBtnRef}
               className="btn bg-transparent px-5 rounded-2xl"
             >
               <RiSendPlane2Line size={18} />
