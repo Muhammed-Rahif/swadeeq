@@ -1,23 +1,9 @@
-import {
-  IonContent,
-  IonFooter,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  ScrollDetail,
-} from "@ionic/react";
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef,
-} from "react";
-import { AnimatePresence, motion, Variants } from "framer-motion";
+import { IonContent, IonFooter, IonPage } from "@ionic/react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
-import { MdContactless, MdOutlineKeyboardVoice } from "react-icons/md";
 import { TypeAnimation } from "react-type-animation";
+import { removeEmojis } from "@nlpjs/emoji";
 import { trainBrain } from "../brain";
 
 const botChatAnime: Variants = {
@@ -49,10 +35,29 @@ const ChatBot: React.FC = () => {
       const brain = await trainBrain();
       setBrain(brain);
     }
-    load();
+    if (!brain) load();
   }, []);
 
+  const answerWithoutUserInput = useCallback(
+    async (q: string) => {
+      if (!brain) return;
+      const brainResponse = await brain.process("en", q);
+
+      if (brainResponse.answer)
+        setChats((chats) => [
+          ...chats,
+          {
+            by: "bot",
+            id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+            message: brainResponse.answer,
+          },
+        ]);
+    },
+    [brain]
+  );
+
   const onUserInput = useCallback(async () => {
+    if (!brain) return;
     if (!textBox.current?.value) return textBox.current?.focus();
 
     setChats([
@@ -65,14 +70,18 @@ const ChatBot: React.FC = () => {
     ]);
 
     setIsBotTyping(true);
-    const botReply = (await brain.process("en", textBox.current?.value)).answer;
+    const brainResponse = await brain.process(
+      "en",
+      removeEmojis(textBox.current?.value)
+    );
     setIsBotTyping(false);
     setChats((chats) => [
       ...chats,
       {
         by: "bot",
         id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-        message: botReply ?? "I am having some technical difficulties",
+        message:
+          brainResponse.answer ?? "I am having some technical difficulties",
       },
     ]);
 

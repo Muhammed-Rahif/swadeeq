@@ -3,6 +3,20 @@
   "locale": "en-US",
   "data": [
     {
+      "intent": "joke.chucknorris",
+      "utterances": [
+        "tell me a chuck norris fact",
+        "tell me a joke about chuck norris",
+        "say a chuck norris joke",
+        "some chuck norris fact"
+      ]
+    },
+    {
+      "intent": "agent.creator",
+      "utterances": ["who created you", "who built you"],
+      "answers": ["His name is Rahif, He lives at Kerala, India"]
+    },
+    {
       "intent": "agent.acquaintance",
       "utterances": [
         "say about you",
@@ -590,76 +604,6 @@
         "forgive me"
       ],
       "answers": ["It's okay. No worries", "It's cool"]
-    },
-    {
-      "intent": "greetings.bye",
-      "utterances": [
-        "goodbye for now",
-        "bye bye take care",
-        "okay see you later",
-        "bye for now",
-        "I must go"
-      ],
-      "answers": ["Till next time", "see you soon!"]
-    },
-    {
-      "intent": "greetings.hello",
-      "utterances": ["hello", "hi", "howdy"],
-      "answers": ["Hey there!", "Greetings!"]
-    },
-    {
-      "intent": "greetings.howareyou",
-      "utterances": [
-        "how is your day",
-        "how is your day going",
-        "how are you",
-        "how are you doing",
-        "what about your day",
-        "are you alright"
-      ],
-      "answers": ["Feeling wonderful!", "Wonderful! Thanks for asking"]
-    },
-    {
-      "intent": "greetings.nicetomeetyou",
-      "utterances": [
-        "nice to meet you",
-        "pleased to meet you",
-        "it was very nice to meet you",
-        "glad to meet you",
-        "nice meeting you"
-      ],
-      "answers": [
-        "It's nice meeting you, too",
-        "Likewise. I'm looking forward to helping you out",
-        "Nice meeting you, as well",
-        "The pleasure is mine"
-      ]
-    },
-    {
-      "intent": "greetings.nicetoseeyou",
-      "utterances": [
-        "nice to see you",
-        "good to see you",
-        "great to see you",
-        "lovely to see you"
-      ],
-      "answers": [
-        "Same here. I was starting to miss you",
-        "So glad we meet again"
-      ]
-    },
-    {
-      "intent": "greetings.nicetotalktoyou",
-      "utterances": [
-        "nice to talk to you",
-        "it's nice to talk to you",
-        "nice talking to you",
-        "it's been nice talking to you"
-      ],
-      "answers": [
-        "It sure was. We can chat again anytime",
-        "I enjoy talking to you, too"
-      ]
     },
     {
       "intent": "user.angry",
