@@ -17,8 +17,8 @@ import React, {
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { MdContactless, MdOutlineKeyboardVoice } from "react-icons/md";
-import RiveScript from "rivescript";
 import { TypeAnimation } from "react-type-animation";
+import { trainBrain } from "../brain";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -41,33 +41,19 @@ const ChatBot: React.FC = () => {
   const textBox = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLIonContentElement>(null);
   const submitBtnRef = useRef<HTMLButtonElement>(null);
-  const [bot, setBot] = useState<RiveScript>();
   const [isBotTyping, setIsBotTyping] = useState(false);
+  const [brain, setBrain] = useState<any>();
 
   useEffect(() => {
-    const bot = new RiveScript();
-
-    bot
-      .loadFile(["/assets/brain/greetings.rive"])
-      .then(() => {
-        bot.sortReplies();
-
-        setBot(bot);
-
-        if (!textBox.current) return;
-        textBox.current.value = "Hello bot";
-        submitBtnRef.current?.click();
-      })
-      .catch(console.error);
+    async function load() {
+      const brain = await trainBrain();
+      setBrain(brain);
+    }
+    load();
   }, []);
 
   const onUserInput = useCallback(async () => {
-    if (!bot) return;
     if (!textBox.current?.value) return textBox.current?.focus();
-
-    const botReply = await bot
-      .reply("local-user", textBox.current?.value || "Nothing to say")
-      .catch(console.error);
 
     setChats([
       ...chats,
@@ -77,23 +63,23 @@ const ChatBot: React.FC = () => {
         message: textBox.current.value,
       },
     ]);
+
     setIsBotTyping(true);
+    const botReply = (await brain.process("en", textBox.current?.value)).answer;
+    setIsBotTyping(false);
+    setChats((chats) => [
+      ...chats,
+      {
+        by: "bot",
+        id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+        message: botReply ?? "I am having some technical difficulties",
+      },
+    ]);
+
     textBox.current.focus();
     textBox.current.value = "";
     contentRef.current?.scrollToBottom(500);
-
-    setTimeout(() => {
-      setChats((chats) => [
-        ...chats,
-        {
-          by: "bot",
-          id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-          message: botReply ?? "I am having some technical difficulties",
-        },
-      ]);
-      setIsBotTyping(false);
-    }, 2260);
-  }, [bot, chats]);
+  }, [brain, chats]);
 
   return (
     <IonPage>
@@ -172,7 +158,7 @@ const ChatBot: React.FC = () => {
           >
             <div className="chat-bubble rounded-3xl duration-200 bg-white/30 before:hidden !rounded-bl-3xl mb-0">
               <TypeAnimation
-                sequence={["Typing...", 500, "Typi", 500]}
+                sequence={["Typing...", 500, "Typing", 500]}
                 wrapper="span"
                 cursor={false}
                 repeat={Infinity}
@@ -200,7 +186,9 @@ const ChatBot: React.FC = () => {
             <button
               onClick={onUserInput}
               ref={submitBtnRef}
-              className="btn bg-transparent px-5 !outline !outline-base-200 !rounded-r-2xl"
+              className={`btn bg-transparent px-5 !outline !outline-base-200 !rounded-r-2xl ${
+                !Boolean(brain) && "loading"
+              }`}
             >
               <RiSendPlane2Line size={18} />
             </button>
