@@ -1,5 +1,6 @@
 name: Build and deploy
 on: 
+  workflow_dispatch:
   push:
     tags:
       - '*'
@@ -8,6 +9,7 @@ jobs:
   build-deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -45,5 +47,3 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           body: Version $tag dubug apk release upload
-          
-        
