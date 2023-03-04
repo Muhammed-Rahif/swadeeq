@@ -24,6 +24,7 @@ jobs:
       - name: Build app for android
         run: |
           CI=false
+          yarn build
           npx cap sync android
           ionic capacitor update
           ionic capacitor copy android 
