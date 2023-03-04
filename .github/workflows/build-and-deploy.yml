@@ -1,5 +1,8 @@
 name: Build and deploy
-on: push
+on: 
+  push:
+    tags:
+      - '*'
 
 jobs:
   build-deploy:
@@ -31,7 +34,16 @@ jobs:
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug 
-          find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/| - \1/"
           cd ..
+
+      - name: Upload apk debug file to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: android/app/build/outputs/apk/debug/app-debug.apk
+          asset_name: app-debug-$tag
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: Version $tag dubug apk release upload
           
         
