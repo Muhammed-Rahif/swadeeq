@@ -17,6 +17,9 @@ jobs:
       - name: Setup ionic and capacitor
         run: |
           npm i -g cordova @ionic/cli @capacitor/cli
+          
+      - name: Install node modules
+        run: npm i
 
       - name: Build app for android
         run: |
