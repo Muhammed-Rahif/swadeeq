@@ -3,8 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { TypeAnimation } from "react-type-animation";
-import { removeEmojis } from "@nlpjs/emoji";
-import { trainBrain } from "../brain";
+import { getReply, trainBrain } from "../brain";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -19,7 +18,7 @@ const userChatAnime: Variants = {
 type ChatsType = {
   id: string;
   by: "bot" | "user";
-  message: string;
+  message: string | React.ReactNode;
 }[];
 
 const ChatBot: React.FC = () => {
@@ -41,15 +40,15 @@ const ChatBot: React.FC = () => {
   const answerWithoutUserInput = useCallback(
     async (q: string) => {
       if (!brain) return;
-      const brainResponse = await brain.process("en", q);
+      const brainResponse = await getReply(brain, q);
 
-      if (brainResponse.answer)
+      if (brainResponse.output.answer)
         setChats((chats) => [
           ...chats,
           {
             by: "bot",
             id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-            message: brainResponse.answer,
+            message: brainResponse.output.answer,
           },
         ]);
     },
@@ -60,33 +59,37 @@ const ChatBot: React.FC = () => {
     if (!brain) return;
     if (!textBox.current?.value) return textBox.current?.focus();
 
+    const userQuery = textBox.current.value;
+    textBox.current.focus();
+    textBox.current.value = "";
     setChats([
       ...chats,
       {
         id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
         by: "user",
-        message: textBox.current.value,
+        message: userQuery,
       },
     ]);
 
     setIsBotTyping(true);
-    const brainResponse = await brain.process(
-      "en",
-      removeEmojis(textBox.current?.value)
+    const brainResponse = await getReply(brain, userQuery);
+
+    const message = brainResponse.dynamic ? (
+      <brainResponse.dynamic />
+    ) : (
+      brainResponse.output.answer
     );
+
     setIsBotTyping(false);
     setChats((chats) => [
       ...chats,
       {
         by: "bot",
         id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-        message:
-          brainResponse.answer ?? "I am having some technical difficulties",
+        message,
       },
     ]);
 
-    textBox.current.focus();
-    textBox.current.value = "";
     contentRef.current?.scrollToBottom(500);
   }, [brain, chats]);
 
