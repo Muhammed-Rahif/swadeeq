@@ -9,19 +9,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         
-      - name: Setup java with ionic
-        uses: coturiv/setup-ionic@v1
+      - name: Setup node environment
+        uses: actions/setup-node@v3
         with:
-          java-version: 8
+          node-version: 16
 
-      - name: Setup cordova with ionic
-        uses: coturiv/setup-ionic@v1
-        with:
-          cordova-version: 8
-
-      - name: Build
+      - name: Setup ionic and capacitor
         run: |
-          ionic capacitor copy android 
-          cd android
-          gradlew assembleDebug
-          cd ..
+          npm i -g cordova @ionic/cli
+
+      - name: Build app for android
+        run: |
+          ionic capacitor build android
+          
+        
