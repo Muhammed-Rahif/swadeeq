@@ -25,9 +25,10 @@ jobs:
         run: |
           CI=false
           ionic capacitor copy android 
-          cd android 
-          find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/| - \1/"
+          cd android
+          chmod +x gradlew
           ./gradlew assembleDebug 
+          find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/| - \1/"
           cd ..
           
         
