@@ -1,12 +1,20 @@
-- name: Use coturiv/setup-ionic
-  uses: coturiv/setup-ionic@v1
-  with:
-    java-version: 8
-- name: Use coturiv/setup-ionic
-  uses: coturiv/setup-ionic@v1
-  with:
-    cordova-version: 8
+name: Build and Deploy
+on: [push]
 
-- name: Build
-  run: |
-    ionic cordova build android --prod
+jobs:
+  Build-Deploy:
+    - name: Setup java with ionic
+      uses: coturiv/setup-ionic@v1
+      with:
+        java-version: 8
+    - name: Setup cordova with ionic
+      uses: coturiv/setup-ionic@v1
+      with:
+        cordova-version: 8
+
+    - name: Build
+      run: |
+        ionic capacitor copy android 
+        cd android
+        gradlew assembleDebug
+        cd ..
