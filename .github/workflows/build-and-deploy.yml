@@ -1,0 +1,49 @@
+name: Build and deploy
+on: 
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Setup node environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Setup ionic and capacitor
+        run: |
+          npm i -g @ionic/cli @capacitor/cli yarn
+          
+      - name: Install node modules
+        run: yarn
+
+      - name: Build app for android
+        run: |
+          CI=false
+          yarn build
+          npx cap sync android
+          ionic capacitor update
+          ionic capacitor copy android 
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug 
+          cd ..
+
+      - name: Upload apk debug file to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: android/app/build/outputs/apk/debug/app-debug.apk
+          asset_name: app-debug-$tag
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: Version $tag dubug apk release upload
