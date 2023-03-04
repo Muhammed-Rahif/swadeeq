@@ -23,6 +23,10 @@ jobs:
 
       - name: Build app for android
         run: |
-          ionic capacitor build android
+          ionic capacitor copy android 
+          cd android 
+          gradlew assembleDebug 
+          cd ..
+          find . -type d | sed -e "s/[^-][^\/]*\//  |/g" -e "s/|\([^ ]\)/| - \1/"
           
         
