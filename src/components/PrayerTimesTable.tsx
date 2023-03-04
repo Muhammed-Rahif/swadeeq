@@ -17,13 +17,13 @@ export default function PrayerTimesTable() {
       if (reqForLocation.coarseLocation === "denied")
         return setIsPermissionAllowed(false);
 
-      setIsPermissionAllowed(true);
+      if (reqForLocation.coarseLocation === "granted")
+        setIsPermissionAllowed(true);
     }
     init();
   }, []);
 
   useEffect(() => {
-    alert(isPermissionAllowed);
     async function init() {
       if (!isPermissionAllowed) return;
       const coordinates = await Geolocation.getCurrentPosition();
