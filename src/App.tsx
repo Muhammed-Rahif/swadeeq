@@ -35,7 +35,7 @@ import "./theme/tailwind.css";
 import BottomNav from "./components/BottomNav";
 import ChatBot from "./pages/ChatBot";
 /* Theme variables */
-// import "./theme/variables.css";
+import "./theme/variables.css";
 
 setupIonicReact();
 

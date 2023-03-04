@@ -5,6 +5,11 @@ const config: CapacitorConfig = {
   appName: "Swadeeq",
   webDir: "build",
   bundledWebRuntime: false,
+  plugins: {
+    SplashScreen: {
+      backgroundColor: "#00000000",
+    },
+  },
 };
 
 export default config;
