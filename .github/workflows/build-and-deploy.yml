@@ -16,7 +16,7 @@ jobs:
 
       - name: Setup ionic and capacitor
         run: |
-          npm i -g cordova @ionic/cli @capacitor/cli yarn
+          npm i -g cordova @ionic/cli @capacitor/cli yarn ionic
           
       - name: Install node modules
         run: yarn
