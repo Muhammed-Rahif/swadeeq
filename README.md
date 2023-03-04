@@ -1,7 +1,16 @@
 ```bash
-# build command
+# build command for dubug
 ionic capacitor copy android && cd android && gradlew assembleDebug && cd ..
+
+# build command for release
+ionic capacitor copy android && cd android && gradlew assembleRelease && cd ..
+
+# install to external device directly dubug version
 ionic capacitor copy android && cd android && gradlew assembleDebug && gradlew installDebug && cd ..
+
+# install to external device directly release version
+ionic capacitor copy android && cd android && gradlew assembleRelease && gradlew installRelease && cd ..
+
 # android external device run
 ionic capacitor run android -l --watch --external
 ```
