@@ -23,6 +23,7 @@ jobs:
 
       - name: Build app for android
         run: |
+          CI=false
           ionic capacitor copy android 
           cd android 
           gradlew assembleDebug 
