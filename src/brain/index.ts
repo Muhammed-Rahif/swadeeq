@@ -4,12 +4,11 @@ import { LangEn } from "@nlpjs/lang-en-min";
 import { removeEmojis } from "@nlpjs/emoji";
 import { Reply } from "../types/nlp";
 import dynamicReplies from "./dynamic";
+import prayerCorpus from "./en/prayer";
+import mainCorpus from "./en/main";
+import greetingsCorpus from "./en/greetings";
 
-const corpuses = [
-  require("./en/main.json"),
-  require("./en/greetings.json"),
-  require("./en/prayer.json"),
-];
+const corpuses = [mainCorpus, greetingsCorpus, prayerCorpus];
 
 async function trainBrain(): Promise<any> {
   const container = await containerBootstrap();
