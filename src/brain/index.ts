@@ -4,7 +4,12 @@ import { LangEn } from "@nlpjs/lang-en-min";
 import { removeEmojis } from "@nlpjs/emoji";
 import { Reply } from "../types/nlp";
 import dynamicReplies from "./dynamic";
-import { ReactNode } from "react";
+
+const corpuses = [
+  require("./en/main.json"),
+  require("./en/greetings.json"),
+  require("./en/prayer.json"),
+];
 
 async function trainBrain(): Promise<any> {
   const container = await containerBootstrap();
@@ -13,9 +18,7 @@ async function trainBrain(): Promise<any> {
   const nlp = container.get("nlp");
   nlp.settings.autoSave = false;
 
-  nlp.addCorpus(require("./en/main.json"));
-  nlp.addCorpus(require("./en/greetings.json"));
-  nlp.addCorpus(require("./en/prayer-times.json"));
+  corpuses.map((corpus) => nlp.addCorpus(corpus));
   await nlp.train();
 
   return nlp;
