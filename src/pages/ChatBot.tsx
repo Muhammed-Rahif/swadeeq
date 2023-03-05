@@ -4,6 +4,9 @@ import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { TypeAnimation } from "react-type-animation";
 import { getReply, trainBrain } from "../brain";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -74,6 +77,8 @@ const ChatBot: React.FC = () => {
     setIsBotTyping(true);
     const brainResponse = await getReply(brain, userQuery);
 
+    console.log(brainResponse);
+
     const message = brainResponse.dynamic ? (
       <brainResponse.dynamic />
     ) : (
@@ -131,11 +136,20 @@ const ChatBot: React.FC = () => {
               }`}
             >
               <div
-                className={`chat-bubble rounded-3xl duration-200 bg-white/30 before:hidden ${
+                className={`chat-bubble py-3 rounded-3xl duration-200 bg-white/30 before:hidden ${
                   isLastChatByBot ? "!rounded-bl-3xl mb-0" : ""
                 }`}
               >
-                {message}
+                {typeof message === "string" ? (
+                  <ReactMarkdown
+                    rehypePlugins={[rehypeRaw]}
+                    remarkPlugins={[remarkGfm]}
+                  >
+                    {message}
+                  </ReactMarkdown>
+                ) : (
+                  message
+                )}
               </div>
             </motion.div>
           ) : (
@@ -188,6 +202,7 @@ const ChatBot: React.FC = () => {
               placeholder="Say assalamu alaikum..."
               rows={1}
               ref={textBox}
+              autoFocus
               onFocus={() =>
                 setTimeout(() => {
                   contentRef.current?.scrollToBottom(500);
