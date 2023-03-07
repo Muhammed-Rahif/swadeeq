@@ -164,6 +164,11 @@ const ChatBot: React.FC = () => {
                   <ReactMarkdown
                     rehypePlugins={[rehypeRaw]}
                     remarkPlugins={[remarkGfm]}
+                    components={{
+                      table: ({ node, ...props }) => (
+                        <table {...props} className="table" />
+                      ),
+                    }}
                   >
                     {message}
                   </ReactMarkdown>

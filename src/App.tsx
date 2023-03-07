@@ -1,8 +1,6 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import PrayerTimes from "./pages/PrayerTimes";
-import Dhikrs from "./pages/Dhikrs";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -37,8 +35,6 @@ const App: React.FC = () => (
           <Route exact path="/">
             <Redirect to="/chat-bot" />
           </Route>
-          <Route path="/prayer-times" component={PrayerTimes} />
-          <Route path="/dhikrs" component={Dhikrs} />
           <Route path="/chat-bot" component={ChatBot} />
         </IonRouterOutlet>
 
