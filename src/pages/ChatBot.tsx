@@ -4,10 +4,6 @@ import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { TypeAnimation } from "react-type-animation";
 import { getReply, trainBrain } from "../brain";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import uuid from "short-uuid";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -44,30 +40,17 @@ const ChatBot: React.FC = () => {
   const answerWithoutUserInput = useCallback(
     async (q: string) => {
       if (!brain) return;
-      const { answer } = await getReply(brain, q);
+      const brainResponse = await getReply(brain, q);
 
-      if (Array.isArray(answer)) {
-        setChats((chats) => [
-          ...chats,
-          ...answer.map(
-            (a) =>
-              ({
-                by: "bot",
-                id: uuid.generate(),
-                message: a,
-              } as any)
-          ),
-        ]);
-      } else {
+      if (brainResponse.output.answer)
         setChats((chats) => [
           ...chats,
           {
             by: "bot",
-            id: uuid.generate(),
-            message: answer,
+            id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+            message: brainResponse.output.answer,
           },
         ]);
-      }
     },
     [brain]
   );
@@ -82,38 +65,30 @@ const ChatBot: React.FC = () => {
     setChats([
       ...chats,
       {
-        id: uuid.generate(),
+        id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
         by: "user",
         message: userQuery,
       },
     ]);
 
     setIsBotTyping(true);
-    const { answer } = await getReply(brain, userQuery);
-    setIsBotTyping(false);
+    const brainResponse = await getReply(brain, userQuery);
 
-    if (Array.isArray(answer)) {
-      setChats((chats) => [
-        ...chats,
-        ...answer.map(
-          (a) =>
-            ({
-              by: "bot",
-              id: uuid.generate(),
-              message: a,
-            } as any)
-        ),
-      ]);
-    } else {
-      setChats((chats) => [
-        ...chats,
-        {
-          by: "bot",
-          id: uuid.generate(),
-          message: answer,
-        },
-      ]);
-    }
+    const message = brainResponse.dynamic ? (
+      <brainResponse.dynamic />
+    ) : (
+      brainResponse.output.answer
+    );
+
+    setIsBotTyping(false);
+    setChats((chats) => [
+      ...chats,
+      {
+        by: "bot",
+        id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+        message,
+      },
+    ]);
 
     contentRef.current?.scrollToBottom(500);
   }, [brain, chats]);
@@ -156,25 +131,11 @@ const ChatBot: React.FC = () => {
               }`}
             >
               <div
-                className={`chat-bubble py-3 rounded-3xl duration-200 bg-white/30 before:hidden ${
+                className={`chat-bubble rounded-3xl duration-200 bg-white/30 before:hidden ${
                   isLastChatByBot ? "!rounded-bl-3xl mb-0" : ""
                 }`}
               >
-                {typeof message === "string" ? (
-                  <ReactMarkdown
-                    rehypePlugins={[rehypeRaw]}
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      table: ({ node, ...props }) => (
-                        <table {...props} className="table table-compact" />
-                      ),
-                    }}
-                  >
-                    {message}
-                  </ReactMarkdown>
-                ) : (
-                  message
-                )}
+                {message}
               </div>
             </motion.div>
           ) : (
@@ -227,7 +188,6 @@ const ChatBot: React.FC = () => {
               placeholder="Say assalamu alaikum..."
               rows={1}
               ref={textBox}
-              autoFocus
               onFocus={() =>
                 setTimeout(() => {
                   contentRef.current?.scrollToBottom(500);

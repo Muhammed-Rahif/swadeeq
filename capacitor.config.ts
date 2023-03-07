@@ -5,15 +5,8 @@ const config: CapacitorConfig = {
   appName: "Swadeeq",
   webDir: "build",
   bundledWebRuntime: false,
-  backgroundColor: "#00000000",
-  android: {
-    backgroundColor: "#00000000",
-  },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2000,
-      launchAutoHide: true,
-      launchFadeOutDuration: 1000,
       backgroundColor: "#00000000",
     },
   },
