@@ -7,6 +7,7 @@ import { getReply, trainBrain } from "../brain";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import uuid from "short-uuid";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -43,17 +44,30 @@ const ChatBot: React.FC = () => {
   const answerWithoutUserInput = useCallback(
     async (q: string) => {
       if (!brain) return;
-      const brainResponse = await getReply(brain, q);
+      const { answer } = await getReply(brain, q);
 
-      if (brainResponse.output.answer)
+      if (Array.isArray(answer)) {
+        setChats((chats) => [
+          ...chats,
+          ...answer.map(
+            (a) =>
+              ({
+                by: "bot",
+                id: uuid.generate(),
+                message: a,
+              } as any)
+          ),
+        ]);
+      } else {
         setChats((chats) => [
           ...chats,
           {
             by: "bot",
-            id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-            message: brainResponse.output.answer,
+            id: uuid.generate(),
+            message: answer,
           },
         ]);
+      }
     },
     [brain]
   );
@@ -68,32 +82,38 @@ const ChatBot: React.FC = () => {
     setChats([
       ...chats,
       {
-        id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
+        id: uuid.generate(),
         by: "user",
         message: userQuery,
       },
     ]);
 
     setIsBotTyping(true);
-    const brainResponse = await getReply(brain, userQuery);
-
-    console.log(brainResponse);
-
-    const message = brainResponse.dynamic ? (
-      <brainResponse.dynamic />
-    ) : (
-      brainResponse.output.answer
-    );
-
+    const { answer } = await getReply(brain, userQuery);
     setIsBotTyping(false);
-    setChats((chats) => [
-      ...chats,
-      {
-        by: "bot",
-        id: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
-        message,
-      },
-    ]);
+
+    if (Array.isArray(answer)) {
+      setChats((chats) => [
+        ...chats,
+        ...answer.map(
+          (a) =>
+            ({
+              by: "bot",
+              id: uuid.generate(),
+              message: a,
+            } as any)
+        ),
+      ]);
+    } else {
+      setChats((chats) => [
+        ...chats,
+        {
+          by: "bot",
+          id: uuid.generate(),
+          message: answer,
+        },
+      ]);
+    }
 
     contentRef.current?.scrollToBottom(500);
   }, [brain, chats]);
@@ -144,6 +164,11 @@ const ChatBot: React.FC = () => {
                   <ReactMarkdown
                     rehypePlugins={[rehypeRaw]}
                     remarkPlugins={[remarkGfm]}
+                    components={{
+                      table: ({ node, ...props }) => (
+                        <table {...props} className="table table-compact" />
+                      ),
+                    }}
                   >
                     {message}
                   </ReactMarkdown>
