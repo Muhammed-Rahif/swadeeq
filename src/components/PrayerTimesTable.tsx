@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getPrayerTimeApiUrl } from "../constants/api";
 import axios from "axios";
 import { PrayerTimeType } from "../types/PrayerTimeType";
-import { Geolocation } from "@capacitor/geolocation";
-
+import {
+  Geolocation as NativeGeolocation,
+  Position,
+} from "@capacitor/geolocation";
+import { Capacitor } from "@capacitor/core";
 export default function PrayerTimesTable() {
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimeType[]>([]);
   const [isPermissionAllowed, setIsPermissionAllowed] = useState<
@@ -12,21 +15,49 @@ export default function PrayerTimesTable() {
 
   useEffect(() => {
     async function init() {
-      const reqForLocation = await Geolocation.requestPermissions();
+      if (Capacitor.isNativePlatform()) {
+        const reqForLocation = await NativeGeolocation.requestPermissions();
 
-      if (reqForLocation.coarseLocation === "denied")
-        return setIsPermissionAllowed(false);
+        if (reqForLocation.coarseLocation === "denied")
+          return setIsPermissionAllowed(false);
 
-      if (reqForLocation.coarseLocation === "granted")
-        setIsPermissionAllowed(true);
+        if (reqForLocation.coarseLocation === "granted")
+          setIsPermissionAllowed(true);
+      }
     }
     init();
   }, []);
 
   useEffect(() => {
     async function init() {
-      if (!isPermissionAllowed) return;
-      const coordinates = await Geolocation.getCurrentPosition();
+      let coordinates: Position | undefined;
+      if (Capacitor.isNativePlatform() && isPermissionAllowed) {
+        coordinates = await NativeGeolocation.getCurrentPosition();
+      } else {
+        navigator.geolocation.getCurrentPosition((crds) => {
+          setIsPermissionAllowed(true);
+          coordinates = crds;
+          axios
+            .get(
+              getPrayerTimeApiUrl({
+                latitude: coordinates.coords.latitude,
+                longitude: coordinates.coords.longitude,
+                method: 4,
+                month: new Date().getMonth() + 1,
+                year: new Date().getFullYear(),
+                isIso8601: false,
+              })
+            )
+            .then((res) => {
+              if (res.data.status === "OK") {
+                const { data }: { data: PrayerTimeType[] } = res.data;
+                setPrayerTimes(data);
+              }
+            });
+        });
+      }
+
+      if (!coordinates) return;
 
       axios
         .get(
@@ -63,7 +94,7 @@ export default function PrayerTimesTable() {
               </thead>
               <tbody>
                 {Object.keys(prayerTimes[0]?.timings).map((name, indx) => (
-                  <tr>
+                  <tr key={indx}>
                     <th>{name}</th>
                     <td>{Object.values(prayerTimes[0]?.timings)[indx]}</td>
                   </tr>

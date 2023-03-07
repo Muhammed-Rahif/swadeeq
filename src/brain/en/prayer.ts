@@ -15,7 +15,6 @@ const prayerCorpus = {
         "when is salah time",
         "salah times",
       ],
-      answers: ["GET_PRAYER_TIMES"],
     },
     {
       intent: "prayer.importance",
