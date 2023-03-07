@@ -7,8 +7,8 @@ export interface PrayerTimeType {
 export interface DateClass {
   readable: string;
   timestamp: string;
-  gregorian: Gregorian;
   hijri: Hijri;
+  gregorian: Gregorian;
 }
 
 export interface Gregorian {
@@ -82,7 +82,7 @@ export interface Location {
 
 export interface Params {
   Fajr: number;
-  Isha: string;
+  Isha: number;
 }
 
 export interface Timings {
