@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 export interface Reply {
   locale: string;
   utterance: string;
@@ -14,7 +12,7 @@ export interface Reply {
   entities: any[];
   sourceEntities: any[];
   answers: Answer[];
-  answer: (string | ReactNode) | (string | ReactNode)[];
+  answer: string;
   actions: any[];
   sentiment: Sentiment;
 }

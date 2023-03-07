@@ -1,0 +1,21 @@
+{
+  "name": "Corpus",
+  "locale": "en-US",
+  "data": [
+    {
+      "intent": "dynamics.getprayertimes",
+      "utterances": [
+        "prayer times",
+        "get prayer times",
+        "what is prayer times",
+        "when is prayer times",
+        "prayer times",
+        "is it time for prayer",
+        "when is salah",
+        "when is salah time",
+        "salah times"
+      ],
+      "answers": ["GET_PRAYER_TIMES"]
+    }
+  ]
+}
