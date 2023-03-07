@@ -21,7 +21,7 @@ export default async function onIntent(nlp: any, input: Reply) {
 
     // ================================ prayer.getprayertimes ================================
     case "prayer.getprayertimes":
-      let prayerTimes: PrayerTimeType[] | undefined;
+      let prayerTimes: PrayerTimeType["timings"] | undefined;
       let currentLocation: Position | undefined;
 
       if (Capacitor.isNativePlatform()) {
@@ -43,34 +43,54 @@ export default async function onIntent(nlp: any, input: Reply) {
               latitude: currentLocation.coords.latitude,
               longitude: currentLocation.coords.longitude,
               method: 4,
+              day: new Date().getDate(),
               month: new Date().getMonth() + 1,
               year: new Date().getFullYear(),
-              isIso8601: false,
+              isIso8601: true,
             })
           );
 
           if (response.data.status === "OK") {
-            const { data }: { data: PrayerTimeType[] } = response.data;
-            prayerTimes = data;
+            const { data }: { data: PrayerTimeType } = response.data;
+            prayerTimes = data.timings;
+            const prayerNames = Object.keys(prayerTimes!);
 
-            let ans: string[] = Object.keys(prayerTimes[0].timings).map(
-              (prayerName) => {
-                return `| ${prayerName} | ${
-                  prayerTimes![0].timings[
-                    prayerName as keyof PrayerTimeType["timings"]
-                  ]
-                } |`;
+            Object.values(prayerTimes).map((time, indx) => {
+              prayerTimes![
+                prayerNames[indx] as keyof PrayerTimeType["timings"]
+              ] = dayjs(time.substring(0, 25)).toISOString();
+            });
+
+            const upcomingPrayers = Object.values(prayerTimes).filter(
+              (time, indx) => {
+                return (
+                  ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"].includes(
+                    Object.keys(prayerTimes!)[indx]
+                  ) && dayjs(time).isAfter(dayjs())
+                );
               }
             );
+
+            let ans: string[] = prayerNames.map((prayerName) => {
+              return `| ${prayerName} | ${dayjs(
+                prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
+              ).format("h:mm A")} |`;
+            });
             ans.unshift("| --- | --- |");
             ans.unshift("| Prayer | Time |");
 
-            output.answer = ans.join("\n");
+            output.answer = [
+              "Here are the prayer times for today:",
+              ans.join("\n"),
+              "Remember always to pray on time and renew the remembrance of Allah each time!",
+            ];
           } else {
             output.answer = "Something went wrong. Please try again.";
           }
         } catch (err: any) {
-          output.answer = `Something went wrong. Please try again. (<small>${err.message}</small>)`;
+          console.error(err);
+
+          output.answer = `Something went wrong due to ${err.message}. Please try again.`;
         }
       } else {
         output.answer =

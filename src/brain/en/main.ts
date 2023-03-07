@@ -3,6 +3,17 @@ const mainCorpus = {
   locale: "en-US",
   data: [
     {
+      intent: "whatTimeIsIt",
+      utterances: ["What time is it?"],
+      answers: ["It is {{ time }} o'clock."],
+      actions: [
+        {
+          name: "handleWhatsTimeIntent",
+          parameters: ["en-US", "parameter 2"],
+        },
+      ],
+    },
+    {
       intent: "joke.chucknorris",
       utterances: [
         "tell me a chuck norris fact",
