@@ -1,18 +1,8 @@
 import { Redirect, Route } from "react-router-dom";
-import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact,
-  IonRouterLink,
-} from "@ionic/react";
+import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import PrayerTimes from "./pages/PrayerTimes";
-import Dhikrs from "./pages/Dhikrs";
+import { SplashScreen } from "@capacitor/splash-screen";
+import ChatBot from "./pages/ChatBot";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -32,30 +22,36 @@ import "@ionic/react/css/display.css";
 
 /* Tailwind styles */
 import "./theme/tailwind.css";
-import BottomNav from "./components/BottomNav";
-import ChatBot from "./pages/ChatBot";
 /* Theme variables */
 import "./theme/variables.css";
+import "./theme/styles.css";
+import { useEffect } from "react";
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <div data-theme="black" className="">
-        <IonRouterOutlet>
-          <Route exact path="/">
-            <Redirect to="/chat-bot" />
-          </Route>
-          <Route path="/prayer-times" component={PrayerTimes} />
-          <Route path="/dhikrs" component={Dhikrs} />
-          <Route path="/chat-bot" component={ChatBot} />
-        </IonRouterOutlet>
+const App: React.FC = () => {
+  useEffect(() => {
+    (async () => {
+      await SplashScreen.hide();
+    })();
+  }, []);
 
-        {/* <BottomNav /> */}
-      </div>
-    </IonReactRouter>
-  </IonApp>
-);
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <div data-theme="black" className="">
+          <IonRouterOutlet>
+            <Route exact path="/">
+              <Redirect to="/chat-bot" />
+            </Route>
+            <Route path="/chat-bot" component={ChatBot} />
+          </IonRouterOutlet>
+
+          {/* <BottomNav /> */}
+        </div>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
