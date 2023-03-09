@@ -3,8 +3,8 @@ name: "Pre release"
 
 on:
   push:
-    branches:
-      - "main"
+    tags:
+      - "v*.*.*"
 
 jobs:
   pre-release:
@@ -42,12 +42,22 @@ jobs:
           ./gradlew assembleRelease
           cd ..
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Conventional Changelog Action
+        uses: TriPSs/conventional-changelog-action@v3
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          git-message: 'chore(release): {version}'
+          preset: 'react'
+          tag-prefix: 'v'
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.changelog.outputs.clean_changelog }}
           prerelease: true
-          title: "v1.*.* release"
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          name: ${{ steps.changelog.outputs.tag }}
           files: |
             android/app/build/outputs/apk/release/app-release-unsigned.apk
             android/app/build/outputs/apk/debug/app-debug.apk
+            CHANGELOG.md
