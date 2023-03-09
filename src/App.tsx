@@ -1,6 +1,7 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -24,24 +25,33 @@ import ChatBot from "./pages/ChatBot";
 /* Theme variables */
 import "./theme/variables.css";
 import "./theme/styles.css";
+import { useEffect } from "react";
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <div data-theme="black" className="">
-        <IonRouterOutlet>
-          <Route exact path="/">
-            <Redirect to="/chat-bot" />
-          </Route>
-          <Route path="/chat-bot" component={ChatBot} />
-        </IonRouterOutlet>
+const App: React.FC = () => {
+  useEffect(() => {
+    (async () => {
+      await SplashScreen.hide();
+    })();
+  }, []);
 
-        {/* <BottomNav /> */}
-      </div>
-    </IonReactRouter>
-  </IonApp>
-);
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <div data-theme="black" className="">
+          <IonRouterOutlet>
+            <Route exact path="/">
+              <Redirect to="/chat-bot" />
+            </Route>
+            <Route path="/chat-bot" component={ChatBot} />
+          </IonRouterOutlet>
+
+          {/* <BottomNav /> */}
+        </div>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
