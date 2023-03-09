@@ -34,8 +34,6 @@ export default async function onIntent(nlp: any, input: Reply) {
         })
       );
 
-    console.log(searchQuery, input.entities[0].utteranceText);
-
     return (output.answer = [
       ...ytSearchResults.items.map((item, indx) => {
         const videoData = ytSearchResults.items[indx];
@@ -73,7 +71,7 @@ export default async function onIntent(nlp: any, input: Reply) {
     const variableRegex = RegExp(`<%[${input.entities[0].entity}\\s]+%>`);
     const searchQuery = (input.answer as string).replace(
       variableRegex,
-      input.entities[0].option
+      input.entities[0].utteranceText
     );
     const { data: ytSearchResults }: { data: YouTubeSearchResults } =
       await axios.get(
