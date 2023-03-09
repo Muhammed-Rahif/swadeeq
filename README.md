@@ -26,7 +26,7 @@
     <a href="https://github.com/Muhammed-Rahif/swadeeq/releases/"><strong>View the latest release »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Muhammed-Rahif/swadeeq#readme">Screenshots</a>
+    <a href="https://github.com/Muhammed-Rahif/swadeeq#screenshots">Screenshots</a>
     ·
     <a href="https://github.com/Muhammed-Rahif/swadeeq/issues/new/choose">Report Bug</a>
     ·
@@ -61,15 +61,17 @@
   </ol>
 </details>
 
-<!-- ABOUT THE PROJECT -->
-
-## About The Project
+### Screenshots
 
 <div align="center">
   <img src="resources/screenshot-3.png" width="32%">
   <img src="resources/screenshot-1.png" width="32%">
   <img src="resources/screenshot-2.png" width="32%">
 </div>
+
+<!-- ABOUT THE PROJECT -->
+
+## About The Project
 
 Swadeeq is a mobile app designed to help Muslims stay consistent in their faith and strengthen their spiritual connection with Allah. With its chatbot interface, users can easily ask the bot about prayer times for their location, Islamic rulings on various topics, and get inspired to pray on time. The app also includes styled replies from the chatbot, rich dark-themed UI, Islamic calendar response, automatic notifications on prayer, dhikr, sleep and wakeup times, replying with hadiths and surah ayahs, or surah info, and basic knowledge about Islam and tawheed.
 
