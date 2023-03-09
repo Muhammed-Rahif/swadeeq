@@ -1,14 +1,15 @@
-name: Build and deploy
-on: 
-  workflow_dispatch:
+---
+name: "Pre release"
+
+on:
   push:
-    tags:
-      - '*'
+    branches:
+      - "main"
 
 jobs:
-  build-deploy:
-    name: Build and deploy
-    runs-on: ubuntu-latest
+  pre-release:
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
     permissions: write-all
     steps:
       - name: Checkout repository
@@ -40,12 +41,12 @@ jobs:
           ./gradlew assembleDebug 
           cd ..
 
-      - name: Upload apk debug file to release
-        uses: svenstaro/upload-release-action@v2
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: android/app/build/outputs/apk/debug/app-debug.apk
-          asset_name: app-debug-$tag.apk
-          tag: ${{ github.ref }}
-          overwrite: true
-          body: Version $tag dubug apk release upload
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Latest Pre-release"
+          files: |
+            android/app/build/outputs/apk/release/app-release-unsigned.apk
+            android/app/build/outputs/apk/debug/app-debug.apk

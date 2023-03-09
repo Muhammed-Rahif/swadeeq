@@ -223,7 +223,7 @@ const ChatBot: React.FC = () => {
         <div className="flex items-stretch justify-between pt-2 form-control">
           <div className="input-group">
             <textarea
-              className="textarea !rounded-l-2xl w-full !outline !outline-base-200 mr-1 font-bold"
+              className="textarea resize-none !rounded-l-2xl w-full !outline !outline-base-200 mr-1 font-bold"
               placeholder="Say assalamu alaikum..."
               rows={1}
               ref={textBox}
