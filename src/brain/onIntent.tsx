@@ -7,13 +7,70 @@ import {
 } from "@capacitor/geolocation";
 import { PrayerTimeType } from "../types/PrayerTimeType";
 import axios from "axios";
-import { getPrayerTimeApiUrl } from "../constants/api";
+import { getPrayerTimeApiUrl, getYouTubeSearchApiUrl } from "../constants/api";
+import { YouTubeSearchResults } from "../types/YouTubeSearchResults";
+import { htmlDecode } from "../herlpers/string";
 
 export default async function onIntent(nlp: any, input: Reply) {
   const output = input;
   const time = dayjs().format("h:mm A");
 
   switch (input.intent) {
+    // ================================ youtube.quranreciatation ================================
+    case "youtube.quranreciatation":
+      console.log(input);
+
+      return input;
+      break;
+
+    // ================================ youtube.islamicruling ================================
+    case "youtube.islamicruling":
+      console.log(input.entities);
+
+      if (input.entities.length >= 0 && !Boolean(input.entities[0]))
+        return (output.answer = "Please enter a valid topic to search for.");
+
+      const variableRegex = RegExp(`<%[${input.entities[0].entity}\\s]+%>`);
+      const searchQuery = (input.answer as string).replace(
+        variableRegex,
+        input.entities[0].option
+      );
+      const { data: ytSearchResults }: { data: YouTubeSearchResults } =
+        await axios.get(
+          getYouTubeSearchApiUrl({
+            query: searchQuery,
+            channel: "assimalhakeem",
+          })
+        );
+
+      output.answer = [
+        searchQuery,
+        ...ytSearchResults.items.map((item, indx) => {
+          const videoData = ytSearchResults.items[indx];
+          const videoWidth = videoData.snippet.thumbnails.medium.width;
+          const videoHeight = videoData.snippet.thumbnails.medium.height;
+          const iframUrl = `https://www.youtube.com/embed/${videoData.id.videoId}`;
+          return (
+            <>
+              <iframe
+                className="rounded-lg border max-w-full"
+                title={input.entities[0].option}
+                width={videoWidth}
+                height={videoHeight}
+                src={iframUrl}
+              ></iframe>
+              <p
+                className="mt-2"
+                style={{ maxWidth: videoData.snippet.thumbnails.medium.width }}
+              >
+                {htmlDecode(videoData.snippet.title)}
+              </p>
+            </>
+          );
+        }),
+      ];
+      break;
+
     // ================================ whatTimeIsIt ================================
     case "whatTimeIsIt":
       output.answer = `It is ${time} o'clock.`;
