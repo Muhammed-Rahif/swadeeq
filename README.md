@@ -26,7 +26,7 @@
     <a href="https://github.com/Muhammed-Rahif/swadeeq/releases/"><strong>View the latest release »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Muhammed-Rahif/swadeeq#screenshots">Screenshots</a>
+    <a href="#screenshots">Screenshots</a>
     ·
     <a href="https://github.com/Muhammed-Rahif/swadeeq/issues/new/choose">Report Bug</a>
     ·
