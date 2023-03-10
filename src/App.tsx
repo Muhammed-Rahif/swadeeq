@@ -26,6 +26,7 @@ import ChatBot from "./pages/ChatBot";
 import "./theme/variables.css";
 import "./theme/styles.css";
 import { useEffect } from "react";
+import BottomNav from "./components/BottomNav";
 
 setupIonicReact();
 
@@ -39,15 +40,15 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <div data-theme="black" className="">
-          <IonRouterOutlet>
+        <div data-theme="cyberpunk">
+          <IonRouterOutlet className="mb-16">
             <Route exact path="/">
               <Redirect to="/chat-bot" />
             </Route>
             <Route path="/chat-bot" component={ChatBot} />
           </IonRouterOutlet>
 
-          {/* <BottomNav /> */}
+          <BottomNav />
         </div>
       </IonReactRouter>
     </IonApp>
