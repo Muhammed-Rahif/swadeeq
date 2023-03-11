@@ -34,7 +34,6 @@ async function trainBrain(): Promise<any> {
 
 async function getReply(brain: any, q: string): Promise<Reply> {
   const brainResponse = await brain.process("en", removeEmojis(q));
-  console.log(brainResponse);
 
   return brainResponse;
 }

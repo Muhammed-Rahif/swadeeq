@@ -19,7 +19,12 @@ export default function Donate() {
         className="ion-padding ![background:transparent] "
       >
         <div className="prose">
-          <h2 className="mt-0 mb-3">Introduction to the Swadeeq App</h2>
+          <h2 className="mt-0 mb-3">
+            Introduction to the <br />
+            <big>
+              <b>Swadeeq App</b>
+            </big>
+          </h2>
           <p>
             Swadeeq is an Islamic app that aims to help Muslims to stay
             consistent on their Deen and regenerate spiritually. It is a chatbot

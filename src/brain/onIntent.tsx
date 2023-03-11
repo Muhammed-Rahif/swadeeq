@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Capacitor } from "@capacitor/core";
 import dayjs from "dayjs";
 import { Reply } from "../types/Reply";
@@ -43,22 +44,26 @@ export default async function onIntent(nlp: any, input: Reply) {
         theme && !allThemes.includes(theme)
           ? "This theme is not available, you can select a theme from available themes below."
           : "Of course, select a theme from your preferences.",
-        <select
-          defaultValue="null"
-          onChange={(e) => {
-            setThemeAtom(e.target.value);
-          }}
-          className="select w-full max-w-xs prose"
-        >
-          <option disabled value="null">
-            Change theme to
-          </option>
-          {allThemes.map((theme) => (
-            <option value={theme} key={theme}>
-              {theme}
-            </option>
-          ))}
-        </select>,
+        <div className="dropdown dropdown-top">
+          <label
+            tabIndex={0}
+            className="btn btn-sm outline-neutral-content outline outline-1 active:outline-neutral-content focus:outline-neutral-content"
+          >
+            Change theme
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content bg-base-100 capitalize menu p-2 shadow-lg flex-nowrap rounded-box w-52 max-h-72 overflow-y-scroll flex-col overflow-x-hidden"
+          >
+            {allThemes.map((theme) => (
+              <li key={theme} className="prose">
+                <a onClick={() => setThemeAtom(theme)} className="no-underline">
+                  {theme}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>,
       ]);
 
     return (output.answer = `Changed theme to ${theme}`);
@@ -112,8 +117,6 @@ export default async function onIntent(nlp: any, input: Reply) {
 
   // ================================ youtube.islamicruling ================================
   else if (input.intent === "youtube.islamicruling") {
-    console.log(input.entities);
-
     if (input.entities.length >= 0 && !Boolean(input.entities[0]))
       return (output.answer = "Please enter a valid topic to search for.");
 

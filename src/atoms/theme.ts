@@ -67,8 +67,6 @@ export const allThemes = [
 
 const localTheme = localStorage.getItem(THEME_STORE_KEY) ?? "black";
 
-console.log(localTheme, allThemes.includes(localTheme));
-
 const themeAtomInit = atom<ThemeAtomType>(
   allThemes.includes(localTheme) ? (localTheme as ThemeAtomType) : "black"
 );
@@ -76,8 +74,6 @@ const themeAtomInit = atom<ThemeAtomType>(
 export const themeAtom = atom(
   (get) => get(themeAtomInit),
   (get, set, newStr: SetStateAction<ThemeAtomType>) => {
-    console.log(`Set: ${newStr}`);
-
     set(themeAtomInit, newStr);
     localStorage.setItem(THEME_STORE_KEY, newStr.toString());
   }

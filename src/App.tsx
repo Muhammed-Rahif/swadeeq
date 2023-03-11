@@ -30,6 +30,7 @@ import BottomNav from "./components/BottomNav";
 import { useAtomValue } from "jotai";
 import { themeAtom } from "./atoms/theme";
 import Donate from "./pages/Donate";
+import Settings from "./pages/Settings";
 
 setupIonicReact();
 
@@ -52,6 +53,7 @@ const App: React.FC = () => {
             </Route>
             <Route path="/chat-bot" component={ChatBot} />
             <Route path="/donate" component={Donate} />
+            <Route path="/settings" component={Settings} />
           </IonRouterOutlet>
 
           <BottomNav />
