@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-        
+
       - name: Setup node environment
         uses: actions/setup-node@v3
         with:
@@ -25,7 +25,7 @@ jobs:
       - name: Setup ionic and capacitor
         run: |
           npm i -g @ionic/cli @capacitor/cli yarn
-          
+
       - name: Install node modules
         run: yarn
 
@@ -48,9 +48,8 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          git-message: 'chore(release): {version}'
-          tag-prefix: 'v'
-          skip-git-pull: "true"
+          git-message: "chore(release): {version}"
+          tag-prefix: "v"
 
       - name: Release
         uses: softprops/action-gh-release@v1
