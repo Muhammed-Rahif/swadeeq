@@ -3,6 +3,22 @@ const themeCorpus = {
   locale: "en-US",
   data: [
     {
+      intent: "theme.whichtheme",
+      utterances: [
+        "which theme is this",
+        "which theme are we currently using",
+        "this theme name",
+        "current theme",
+        "current theme name",
+      ],
+      answers: [
+        "We are using <%theme%> theme.",
+        "This is <%theme%> theme.",
+        "Current theme is <%theme%>.",
+        "The current theme is <%theme%>.",
+      ],
+    },
+    {
       intent: "theme.change",
       utterances: [
         "change theme",

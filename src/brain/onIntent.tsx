@@ -10,14 +10,26 @@ import axios from "axios";
 import { getPrayerTimeApiUrl, getYouTubeSearchApiUrl } from "../constants/api";
 import { YouTubeSearchResults } from "../types/YouTubeSearchResults";
 import { htmlDecode } from "../herlpers/string";
-import { allThemes, setThemeAtom } from "../atoms/theme";
+import { allThemes, setThemeAtom, themeAtom } from "../atoms/theme";
+import { atomStore } from "../atoms/store";
 
 export default async function onIntent(nlp: any, input: Reply) {
   const output = input;
   const time = dayjs().format("h:mm A");
 
   // ================================ theme.reset ================================
-  if (input.intent === "theme.reset") {
+  if (input.intent === "theme.whichtheme") {
+    const variableRegex = RegExp(`<%[theme\\s]+%>`);
+    output.answer = input.answer
+      ? (input.answer as string).replace(
+          variableRegex,
+          `'**${atomStore.get(themeAtom)}**'`
+        )
+      : "";
+  }
+
+  // ================================ theme.reset ================================
+  else if (input.intent === "theme.reset") {
     setThemeAtom("black");
   }
 
