@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Capacitor } from "@capacitor/core";
 import dayjs from "dayjs";
 import { Reply } from "../types/Reply";
@@ -10,13 +11,66 @@ import axios from "axios";
 import { getPrayerTimeApiUrl, getYouTubeSearchApiUrl } from "../constants/api";
 import { YouTubeSearchResults } from "../types/YouTubeSearchResults";
 import { htmlDecode } from "../herlpers/string";
+import { allThemes, setThemeAtom, themeAtom } from "../atoms/theme";
+import { atomStore } from "../atoms/store";
 
 export default async function onIntent(nlp: any, input: Reply) {
   const output = input;
   const time = dayjs().format("h:mm A");
 
+  // ================================ theme.reset ================================
+  if (input.intent === "theme.whichtheme") {
+    const variableRegex = RegExp(`<%[theme\\s]+%>`);
+    output.answer = input.answer
+      ? (input.answer as string).replace(
+          variableRegex,
+          `'**${atomStore.get(themeAtom)}**'`
+        )
+      : "";
+  }
+
+  // ================================ theme.reset ================================
+  else if (input.intent === "theme.reset") {
+    setThemeAtom("black");
+  }
+
+  // ================================ theme.change ================================
+  if (input.intent === "theme.change") {
+    const theme = input.entities[0]?.option;
+
+    if (theme && allThemes.includes(theme)) setThemeAtom(theme);
+    else
+      return (output.answer = [
+        theme && !allThemes.includes(theme)
+          ? "This theme is not available, you can select a theme from available themes below."
+          : "Of course, select a theme from your preferences.",
+        <div className="dropdown dropdown-top">
+          <label
+            tabIndex={0}
+            className="btn btn-sm outline-neutral-content outline outline-1 active:outline-neutral-content focus:outline-neutral-content"
+          >
+            Change theme
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content bg-base-100 capitalize menu p-2 shadow-lg flex-nowrap rounded-box w-52 max-h-72 overflow-y-scroll flex-col overflow-x-hidden"
+          >
+            {allThemes.map((theme) => (
+              <li key={theme} className="prose">
+                <a onClick={() => setThemeAtom(theme)} className="no-underline">
+                  {theme}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>,
+      ]);
+
+    return (output.answer = `Changed theme to ${theme}`);
+  }
+
   // ================================ youtube.quranreciatation ================================
-  if (input.intent === "youtube.quranreciatation") {
+  else if (input.intent === "youtube.quranreciatation") {
     const isHaveEntity =
       input.entities.length >= 0 && !Boolean(input.entities[0]);
 
@@ -63,8 +117,6 @@ export default async function onIntent(nlp: any, input: Reply) {
 
   // ================================ youtube.islamicruling ================================
   else if (input.intent === "youtube.islamicruling") {
-    console.log(input.entities);
-
     if (input.entities.length >= 0 && !Boolean(input.entities[0]))
       return (output.answer = "Please enter a valid topic to search for.");
 

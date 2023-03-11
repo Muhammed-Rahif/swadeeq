@@ -10,11 +10,11 @@ interface BottomNavProps {}
 
 const navs = [
   {
-    path: "/dhikrs",
+    path: "/chat-bot",
     icon: <IoHome />,
   },
   {
-    path: "/some",
+    path: "/donate",
     icon: <IoHeart />,
   },
   {
