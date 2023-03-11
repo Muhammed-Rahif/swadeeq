@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import uuid from "short-uuid";
+import SubhanallahSvg from "../components/SubhanallahSvg";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -124,11 +125,7 @@ const ChatBot: React.FC = () => {
         ref={contentRef}
       >
         <div className="my-3 w-full flex items-center flex-col justify-center text-center prose">
-          <img
-            src="/assets/images/subhan-allah-word-arabic-calligraphy-art.png"
-            alt="Subhanallah"
-            className="w-40 h-auto m-0 drop-shadow"
-          />
+          <SubhanallahSvg className="w-40 h-auto m-0 fill-[hsla(var(--b1)/var(--tw-bg-opacity,1))]" />
 
           <div className="divider py-5">
             <p className="text-xs m-0">
@@ -155,7 +152,7 @@ const ChatBot: React.FC = () => {
             >
               <div
                 className={`chat-bubble py-3 duration-200 ${
-                  isLastChatByBot ? "!rounded-bl-3xl mb-0" : ""
+                  isLastChatByBot ? "mb-0 before:opacity-0" : ""
                 }`}
               >
                 {typeof message === "string" ? (
@@ -187,8 +184,8 @@ const ChatBot: React.FC = () => {
               }`}
             >
               <div
-                className={`chat-bubble duration-200 ease-linear ${
-                  isLastChatByUser ? "!rounded-br-3xl mb-0" : ""
+                className={`chat-bubble duration-200 ease-linear bg-primary/90 text-primary-content ${
+                  isLastChatByUser ? "mb-0 before:opacity-0" : ""
                 }`}
               >
                 {message}

@@ -8,8 +8,15 @@ import mainCorpus from "./en/main";
 import greetingsCorpus from "./en/greetings";
 import youtubeCorpus from "./en/youtube";
 import onIntent from "./onIntent";
+import themeCorpus from "./en/theme";
 
-const corpuses = [mainCorpus, greetingsCorpus, prayerCorpus, youtubeCorpus];
+const corpuses = [
+  mainCorpus,
+  greetingsCorpus,
+  prayerCorpus,
+  youtubeCorpus,
+  themeCorpus,
+];
 
 async function trainBrain(): Promise<any> {
   const container = await containerBootstrap();

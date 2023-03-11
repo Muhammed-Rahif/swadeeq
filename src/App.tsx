@@ -27,10 +27,14 @@ import "./theme/variables.css";
 import "./theme/styles.css";
 import { useEffect } from "react";
 import BottomNav from "./components/BottomNav";
+import { useAtomValue } from "jotai";
+import { themeAtom } from "./atoms/theme";
 
 setupIonicReact();
 
 const App: React.FC = () => {
+  const theme = useAtomValue(themeAtom);
+
   useEffect(() => {
     (async () => {
       await SplashScreen.hide();
@@ -40,7 +44,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <div data-theme="cyberpunk">
+        <div data-theme={theme}>
           <IonRouterOutlet className="mb-16">
             <Route exact path="/">
               <Redirect to="/chat-bot" />

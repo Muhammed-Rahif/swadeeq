@@ -10,13 +10,45 @@ import axios from "axios";
 import { getPrayerTimeApiUrl, getYouTubeSearchApiUrl } from "../constants/api";
 import { YouTubeSearchResults } from "../types/YouTubeSearchResults";
 import { htmlDecode } from "../herlpers/string";
+import { allThemes, setThemeAtom } from "../atoms/theme";
 
 export default async function onIntent(nlp: any, input: Reply) {
   const output = input;
   const time = dayjs().format("h:mm A");
 
+  // ================================ theme.change ================================
+  if (input.intent === "theme.change") {
+    const theme = input.entities[0]?.option;
+
+    if (theme && allThemes.includes(theme)) setThemeAtom(theme);
+    else
+      return (output.answer = [
+        theme && !allThemes.includes(theme)
+          ? "This theme is not available, you can select a theme from available themes below."
+          : "Of course, select a theme from your preferences.",
+        <select
+          defaultValue="null"
+          onChange={(e) => {
+            setThemeAtom(e.target.value);
+          }}
+          className="select w-full max-w-xs prose"
+        >
+          <option disabled value="null">
+            Change theme to
+          </option>
+          {allThemes.map((theme) => (
+            <option value={theme} key={theme}>
+              {theme}
+            </option>
+          ))}
+        </select>,
+      ]);
+
+    return (output.answer = `Changed theme to ${theme}`);
+  }
+
   // ================================ youtube.quranreciatation ================================
-  if (input.intent === "youtube.quranreciatation") {
+  else if (input.intent === "youtube.quranreciatation") {
     const isHaveEntity =
       input.entities.length >= 0 && !Boolean(input.entities[0]);
 
