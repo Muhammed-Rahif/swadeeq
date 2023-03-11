@@ -26,10 +26,17 @@ import ChatBot from "./pages/ChatBot";
 import "./theme/variables.css";
 import "./theme/styles.css";
 import { useEffect } from "react";
+import BottomNav from "./components/BottomNav";
+import { useAtomValue } from "jotai";
+import { themeAtom } from "./atoms/theme";
+import Donate from "./pages/Donate";
+import Settings from "./pages/Settings";
 
 setupIonicReact();
 
 const App: React.FC = () => {
+  const theme = useAtomValue(themeAtom);
+
   useEffect(() => {
     (async () => {
       await SplashScreen.hide();
@@ -39,15 +46,17 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <div data-theme="black" className="">
-          <IonRouterOutlet>
+        <div data-theme={theme}>
+          <IonRouterOutlet className="mb-16">
             <Route exact path="/">
               <Redirect to="/chat-bot" />
             </Route>
             <Route path="/chat-bot" component={ChatBot} />
+            <Route path="/donate" component={Donate} />
+            <Route path="/settings" component={Settings} />
           </IonRouterOutlet>
 
-          {/* <BottomNav /> */}
+          <BottomNav />
         </div>
       </IonReactRouter>
     </IonApp>

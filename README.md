@@ -7,6 +7,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![Download][download-img]][download-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 </div>
@@ -23,7 +24,7 @@
   <p align="center">
     Swadeeq is a chat bot, developed to help muslims to be consistent on deen.
     <br />
-    <a href="https://github.com/Muhammed-Rahif/swadeeq/releases/"><strong>View the latest release »</strong></a>
+    <a href="https://github.com/Muhammed-Rahif/swadeeq/releases/"><strong>Install app from here »</strong></a>
     <br />
     <br />
     <a href="#screenshots">Screenshots</a>
@@ -67,6 +68,7 @@
   <img src="resources/screenshot-3.png" width="32%">
   <img src="resources/screenshot-1.png" width="32%">
   <img src="resources/screenshot-2.png" width="32%">
+
 </div>
 
 <!-- ABOUT THE PROJECT -->
@@ -223,6 +225,8 @@ Use this space to list resources you find helpful and would like to give credit 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
+[download-url]: https://github.com/Muhammed-Rahif/swadeeq/releases/latest
+[download-img]: https://img.shields.io/badge/Download%20App-238636?style=for-the-badge&logoColor=white&logo=download
 [contributors-shield]: https://img.shields.io/github/contributors/Muhammed-Rahif/swadeeq.svg?style=for-the-badge
 [contributors-url]: https://github.com/Muhammed-Rahif/swadeeq/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/Muhammed-Rahif/swadeeq.svg?style=for-the-badge
@@ -234,7 +238,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [license-shield]: https://img.shields.io/github/license/Muhammed-Rahif/swadeeq.svg?style=for-the-badge
 [license-url]: https://github.com/Muhammed-Rahif/swadeeq/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
+[linkedin-url]: https://www.linkedin.com/in/muhammed-rahif/
 [product-screenshot]: resources/splash.png
 [nlp.js]: https://img.shields.io/badge/nlp.js-000000?style=for-the-badge&logoColor=white
 [nlp.js-url]: https://github.com/axa-group/nlp.js/

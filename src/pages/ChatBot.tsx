@@ -1,4 +1,11 @@
-import { IonContent, IonFooter, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
@@ -8,6 +15,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import uuid from "short-uuid";
+import SubhanallahSvg from "../components/SubhanallahSvg";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -72,71 +80,70 @@ const ChatBot: React.FC = () => {
     [brain]
   );
 
-  const onUserInput = useCallback(async () => {
-    if (!brain) return;
-    if (!textBox.current?.value) return textBox.current?.focus();
-
-    const userQuery = textBox.current.value;
-    textBox.current.focus();
-    textBox.current.value = "";
-    setChats([
-      ...chats,
-      {
-        id: uuid.generate(),
-        by: "user",
-        message: userQuery,
-      },
-    ]);
-
-    setIsBotTyping(true);
-    const { answer } = await getReply(brain, userQuery);
-    setIsBotTyping(false);
-
-    if (Array.isArray(answer)) {
-      setChats((chats) => [
-        ...chats,
-        ...answer.map(
-          (a) =>
-            ({
-              by: "bot",
-              id: uuid.generate(),
-              message: a,
-            } as any)
-        ),
-      ]);
-    } else {
-      setChats((chats) => [
+  const onUserQuery = useCallback(
+    async (query: string) => {
+      if (!brain) return;
+      setChats([
         ...chats,
         {
-          by: "bot",
           id: uuid.generate(),
-          message: answer,
+          by: "user",
+          message: query,
         },
       ]);
-    }
 
-    contentRef.current?.scrollToBottom(500);
-  }, [brain, chats]);
+      setIsBotTyping(true);
+      const { answer } = await getReply(brain, query);
+      setIsBotTyping(false);
+
+      if (Array.isArray(answer)) {
+        setChats((chats) => [
+          ...chats,
+          ...answer.map(
+            (a) =>
+              ({
+                by: "bot",
+                id: uuid.generate(),
+                message: a,
+              } as any)
+          ),
+        ]);
+      } else {
+        setChats((chats) => [
+          ...chats,
+          {
+            by: "bot",
+            id: uuid.generate(),
+            message: answer,
+          },
+        ]);
+      }
+
+      contentRef.current?.scrollToBottom(500);
+    },
+    [brain, chats]
+  );
 
   return (
     <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Home</IonTitle>
+        </IonToolbar>
+      </IonHeader>
       <IonContent
         style={{ "--background": "hsla(var(--b1) / var(--tw-bg-opacity, 1))" }}
         className="ion-padding ![background:transparent]"
         ref={contentRef}
       >
-        <div className="my-3 w-full flex items-center flex-col justify-center text-center">
-          <img
-            src="/assets/images/subhan-allah-word-arabic-calligraphy-art.png"
-            alt="Subhanallah"
-            className="w-40 h-auto"
-          />
+        <div className="my-3 w-full flex items-center flex-col justify-center text-center prose">
+          <SubhanallahSvg className="w-40 h-auto m-0 fill-[hsla(var(--b1)/var(--tw-bg-opacity,1))]" />
 
-          <div className="divider text-gray-400 py-5">
-            <small className="text-xs">
+          <div className="divider py-5">
+            <p className="text-xs m-0">
               In the name of Allah,
               <br /> the Entirely Merciful the Especially Merciful
-            </small>
+            </p>
           </div>
         </div>
 
@@ -156,8 +163,8 @@ const ChatBot: React.FC = () => {
               }`}
             >
               <div
-                className={`chat-bubble py-3 rounded-3xl duration-200 bg-white/30 before:hidden ${
-                  isLastChatByBot ? "!rounded-bl-3xl mb-0" : ""
+                className={`chat-bubble py-3 duration-200 ${
+                  isLastChatByBot ? "mb-0 before:opacity-0" : ""
                 }`}
               >
                 {typeof message === "string" ? (
@@ -189,8 +196,8 @@ const ChatBot: React.FC = () => {
               }`}
             >
               <div
-                className={`chat-bubble duration-200 ease-linear text-black bg-gradient-to-r from-orange-300 to-green-100 rounded-3xl before:hidden ${
-                  isLastChatByUser ? "!rounded-br-3xl mb-0" : ""
+                className={`chat-bubble duration-200 ease-linear bg-primary/90 text-primary-content ${
+                  isLastChatByUser ? "mb-0 before:opacity-0" : ""
                 }`}
               >
                 {message}
@@ -207,7 +214,7 @@ const ChatBot: React.FC = () => {
             transition={{ duration: 0.2, ease: "circOut" }}
             className="chat gap-0 duration-200 chat-start"
           >
-            <div className="chat-bubble rounded-3xl duration-200 bg-white/30 before:hidden !rounded-bl-3xl mb-0">
+            <div className="chat-bubble duration-200 mb-0">
               <TypeAnimation
                 sequence={["Typing...", 500, "Typing", 500]}
                 wrapper="span"
@@ -221,9 +228,9 @@ const ChatBot: React.FC = () => {
 
       <IonFooter className="bg-[hsla(var(--b1)/var(--tw-bg-opacity,1))] pb-4 px-2">
         <div className="flex items-stretch justify-between pt-2 form-control">
-          <div className="input-group">
+          <div className="input-group prose">
             <textarea
-              className="textarea resize-none !rounded-l-2xl w-full !outline !outline-base-200 mr-1 font-bold"
+              className="textarea textarea-bordered resize-none w-full mr-1 font-bold"
               placeholder="Say assalamu alaikum..."
               rows={1}
               ref={textBox}
@@ -236,11 +243,17 @@ const ChatBot: React.FC = () => {
             ></textarea>
 
             <button
-              onClick={onUserInput}
+              onClick={() => {
+                if (!textBox.current?.value.trim())
+                  return textBox.current?.focus();
+
+                const userQuery = textBox.current.value.trim();
+                textBox.current.focus();
+                textBox.current.value = "";
+                onUserQuery(userQuery);
+              }}
               ref={submitBtnRef}
-              className={`btn bg-transparent px-5 !outline !outline-base-200 !rounded-r-2xl ${
-                !Boolean(brain) && "loading"
-              }`}
+              className={`btn px-5 ${!Boolean(brain) && "loading"}`}
             >
               <RiSendPlane2Line size={18} />
             </button>

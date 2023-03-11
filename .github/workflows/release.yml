@@ -35,10 +35,11 @@ jobs:
           yarn build
           npx cap sync android
           ionic capacitor update
-          ionic capacitor copy android 
+          ionic capacitor copy android
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug 
+          ./gradlew assembleDebug
+          ./gradlew assembleRelease
           cd ..
 
       - uses: "marvinpinto/action-automatic-releases@latest"
@@ -46,7 +47,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: true
-          title: "Latest Pre-release"
+          title: "v1.*.* release"
           files: |
             android/app/build/outputs/apk/release/app-release-unsigned.apk
             android/app/build/outputs/apk/debug/app-debug.apk

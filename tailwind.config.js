@@ -1,6 +1,6 @@
 module.exports = {
   mode: "jit", // Optionally use just in time engine
-  purge: ["./src/**/*.{js,jsx,ts,tsx,css}", "./public/index.html"],
+  content: ["./src/**/*.{js,jsx,ts,tsx,css}", "./public/index.html"],
   theme: {
     extend: {},
   },
