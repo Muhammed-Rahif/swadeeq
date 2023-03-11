@@ -14,7 +14,7 @@ const navs = [
     icon: <IoHome />,
   },
   {
-    path: "/some",
+    path: "/donate",
     icon: <IoHeart />,
   },
   {
