@@ -21,6 +21,17 @@ const themeCorpus = {
     {
       intent: "theme.change",
       utterances: [
+        "what themes we have",
+        "how many themes we have",
+        "list the themes",
+        "list all themes",
+        "list all available themes",
+        "app themes",
+        "show all themes",
+        "show all app themes",
+        "show all available themes",
+        "show all available app themes",
+        "show themes",
         "change theme",
         "change theme to @theme",
         "can you change theme to @theme",

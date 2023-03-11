@@ -1,4 +1,11 @@
-import { IonContent, IonFooter, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
@@ -119,6 +126,11 @@ const ChatBot: React.FC = () => {
 
   return (
     <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Home</IonTitle>
+        </IonToolbar>
+      </IonHeader>
       <IonContent
         style={{ "--background": "hsla(var(--b1) / var(--tw-bg-opacity, 1))" }}
         className="ion-padding ![background:transparent]"
@@ -232,9 +244,10 @@ const ChatBot: React.FC = () => {
 
             <button
               onClick={() => {
-                if (!textBox.current?.value) return textBox.current?.focus();
+                if (!textBox.current?.value.trim())
+                  return textBox.current?.focus();
 
-                const userQuery = textBox.current.value;
+                const userQuery = textBox.current.value.trim();
                 textBox.current.focus();
                 textBox.current.value = "";
                 onUserQuery(userQuery);
