@@ -16,6 +16,11 @@ export default async function onIntent(nlp: any, input: Reply) {
   const output = input;
   const time = dayjs().format("h:mm A");
 
+  // ================================ theme.reset ================================
+  if (input.intent === "theme.reset") {
+    setThemeAtom("black");
+  }
+
   // ================================ theme.change ================================
   if (input.intent === "theme.change") {
     const theme = input.entities[0]?.option;

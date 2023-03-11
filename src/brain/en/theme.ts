@@ -14,6 +14,22 @@ const themeCorpus = {
       ],
       answers: [],
     },
+    {
+      intent: "theme.reset",
+      utterances: [
+        "reset theme",
+        "reset theme to default",
+        "can you reset theme to default",
+        "please reset the theme to default",
+        "turn on default theme",
+      ],
+      answers: [
+        "Okay, reset theme to default.",
+        "Theme reset to default.",
+        "Default theme activated.",
+        "Default theme applied.",
+      ],
+    },
   ],
   entities: {
     theme: {
