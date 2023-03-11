@@ -50,7 +50,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           git-message: "chore(release): {version}"
           tag-prefix: "v"
-          skip-git-pull: "true"
+          skip-git-pull: true
 
       - name: Release
         uses: softprops/action-gh-release@v1
