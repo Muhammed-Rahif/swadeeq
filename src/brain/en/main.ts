@@ -26,8 +26,11 @@ const mainCorpus = {
       intent: "agent.creator",
       utterances: ["who created you", "who built you"],
       answers: ["His name is Rahif, He lives at Kerala, India"],
-    },
-    {
+    },{
+      intent: "about.fajar",
+      utterances: ["what is fajr", "fajr", "about fajr", "subh", "about subh", "what is subh"],
+      answers: ["The Fajr prayer is one of the five mandatory salah, to be performed anytime starting from the moment of dawn, but not after sunrise. As an Islamic day starts at sunset, the Fajr prayer is technically the third prayer of the day. If counted from midnight, it is usually the first prayer of the day. "]
+    },{
       intent: "agent.acquaintance",
       utterances: [
         "say about you",
