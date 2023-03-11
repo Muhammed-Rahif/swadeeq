@@ -44,17 +44,13 @@ jobs:
           ./gradlew assembleRelease
           cd ..
 
-      - name: Checkout repository for Conventional Changelog Action
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
       - name: Conventional Changelog Action
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           git-message: "chore(release): {version}"
           tag-prefix: "v"
+          git-branch: "main"
 
       - name: Release
         uses: softprops/action-gh-release@v1
