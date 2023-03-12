@@ -46,15 +46,18 @@ jobs:
           cd ..
 
       - name: Conventional Changelog Action
+        id: changelog
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.GH_RELEASE_TOKEN }}
           git-message: "chore(release): {version}"
           tag-prefix: "v"
           pre-commit: scripts/versioning.js
+          skip-on-empty: false
 
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         with:
           body: ${{ steps.changelog.outputs.clean_changelog }}
           prerelease: true
