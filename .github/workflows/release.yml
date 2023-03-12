@@ -49,6 +49,7 @@ jobs:
         id: changelog
         uses: TriPSs/conventional-changelog-action@v3
         with:
+          github-token: ${{ secrets.GH_RELEASE_TOKEN }}
           git-message: "chore(release): {version}"
           tag-prefix: "v"
           pre-commit: scripts/versioning.js
