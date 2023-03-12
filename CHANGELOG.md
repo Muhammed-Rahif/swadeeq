@@ -1,4 +1,4 @@
-## [1.0.4](https://github.com/Muhammed-Rahif/swadeeq/compare/v1.0.2...v1.0.4) (2023-03-12)
+## [1.0.3](https://github.com/Muhammed-Rahif/swadeeq/compare/v1.0.2...v1.0.3) (2023-03-12)
 
 
 ### Bug Fixes
