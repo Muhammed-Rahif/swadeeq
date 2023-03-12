@@ -52,6 +52,7 @@ jobs:
           git-message: "chore(release): {version}"
           tag-prefix: "v"
           pre-commit: scripts/versioning.js
+          skip-tag: true
 
       - name: Release
         uses: softprops/action-gh-release@v1
