@@ -3,8 +3,8 @@ name: "Pre release"
 
 on:
   push:
-    tags:
-      - "v*.*.*"
+    branches:
+      - main
 
 jobs:
   pre-release:
@@ -49,12 +49,9 @@ jobs:
         id: changelog
         uses: TriPSs/conventional-changelog-action@v3
         with:
-          github-token: ${{ secrets.GH_RELEASE_TOKEN }}
           git-message: "chore(release): {version}"
           tag-prefix: "v"
           pre-commit: scripts/versioning.js
-          skip-on-empty: false
-          skip-tag: true
 
       - name: Release
         uses: softprops/action-gh-release@v1
