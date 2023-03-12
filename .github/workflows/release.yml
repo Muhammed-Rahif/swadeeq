@@ -48,11 +48,10 @@ jobs:
       - name: Conventional Changelog Action
         uses: TriPSs/conventional-changelog-action@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GH_RELEASE_TOKEN }}
           git-message: "chore(release): {version}"
           tag-prefix: "v"
           pre-commit: scripts/versioning.js
-          skip-tag: true
 
       - name: Release
         uses: softprops/action-gh-release@v1
