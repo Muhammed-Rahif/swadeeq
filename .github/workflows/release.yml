@@ -54,6 +54,7 @@ jobs:
           tag-prefix: "v"
           pre-commit: scripts/versioning.js
           skip-on-empty: false
+          skip-tag: true
 
       - name: Release
         uses: softprops/action-gh-release@v1
