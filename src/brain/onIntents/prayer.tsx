@@ -1,8 +1,9 @@
 import { LocalNotifications } from "@capacitor/local-notifications";
 import dayjs from "dayjs";
+import { getBrainReply } from "..";
 import { getPrayerTimes } from "../../helpers/prayer";
 import { BrainReply } from "../../types/BrainReply";
-import { PrayerTimeType } from "../../types/PrayerTimeType";
+import { PrayerTimeType, Timings } from "../../types/PrayerTimeType";
 
 /**
  * Get reply for "whenItsPrayerTime".
@@ -30,7 +31,7 @@ export const whenItsPrayerTime = async (
  * when intent === "prayer.prayerTimes"
  */
 export const prayerTimes = async (input: BrainReply): Promise<BrainReply> => {
-  let prayerTimes: PrayerTimeType["timings"] | undefined;
+  let prayerTimes: Timings | undefined;
 
   try {
     prayerTimes = await getPrayerTimes({});
@@ -45,31 +46,28 @@ export const prayerTimes = async (input: BrainReply): Promise<BrainReply> => {
 
   const prayerNames = Object.keys(prayerTimes!);
 
-  prayerNames.map((prayerName) => {
+  prayerNames.map(async (prayerName, indx) => {
+    const prayerQuote = (await getBrainReply(`its time to pray ${prayerName}`))
+      .answers;
+    const quranPrayerQuote = (
+      await getBrainReply(`quranic verse about prayer`)
+    ).answer?.toString();
+    const time = dayjs(prayerTimes![prayerName as keyof Timings]).toDate();
+
     // scheduling local notifications for each prayer time
     LocalNotifications.schedule({
       notifications: [
         {
-          body: '"who believe in the unseen, establish prayer, and donate from what We have provided for them, " - Quran 2:3',
-          id: 1,
+          body: prayerQuote[0].answer,
+          id: new Date(prayerTimes![prayerName as keyof Timings]).getTime(),
           schedule: {
-            at: dayjs(
-              prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
-            ).toDate(),
+            at: time,
+            allowWhileIdle: true,
           },
-          title: `Friend, it's ${prayerName} prayer time!`,
-          summaryText: `${prayerName} Prayer, nothing else matters.`,
-          iconColor: "#FF0000",
+          title: prayerQuote[1].answer,
+          summaryText: `${prayerName} prayer, nothing else matters.`,
           smallIcon: "splash",
-          largeIcon: "prayer",
-          largeBody:
-            '"who believe in the unseen, establish prayer, and donate from what We have provided for them, " - Quran 2:3',
-          attachments: [
-            {
-              id: "splash",
-              url: "prayer",
-            },
-          ],
+          largeBody: quranPrayerQuote,
         },
       ],
     });
@@ -78,7 +76,7 @@ export const prayerTimes = async (input: BrainReply): Promise<BrainReply> => {
   // returning the markdown table of prayer times
   let ans: string[] = prayerNames.map((prayerName) => {
     return `| ${prayerName} | ${dayjs(
-      prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
+      prayerTimes![prayerName as keyof Timings]
     ).format("h:mm A")} |`;
   });
   //   adding markdown table headers

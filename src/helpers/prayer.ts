@@ -4,7 +4,7 @@ import {
   Geolocation as NativeGeolocation,
   Position,
 } from "@capacitor/geolocation";
-import { PrayerTimeType } from "../types/PrayerTimeType";
+import { PrayerTimeType, Timings } from "../types/PrayerTimeType";
 import axios from "axios";
 import { getPrayerTimeApiUrl } from "../constants/api";
 import dayjs from "dayjs";
@@ -18,8 +18,8 @@ export async function getPrayerTimes({
   mandatoryPrayersOnly = false,
 }: {
   mandatoryPrayersOnly?: boolean;
-}) {
-  let prayerTimes: PrayerTimeType["timings"];
+}): Promise<Timings | undefined> {
+  let prayerTimes: Timings;
   let currentLocation: Position | undefined;
 
   if (Capacitor.isNativePlatform()) {
@@ -58,8 +58,9 @@ export async function getPrayerTimes({
 
         // convert prayer times to ISO 8601 format
         Object.values(prayerTimes).map((time, indx) => {
-          prayerTimes![prayerNames[indx] as keyof PrayerTimeType["timings"]] =
-            dayjs(time.substring(0, 25)).toISOString();
+          prayerTimes![prayerNames[indx] as keyof Timings] = dayjs(
+            time.substring(0, 25)
+          ).toISOString();
         });
 
         // return only mandatory prayers

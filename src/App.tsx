@@ -34,7 +34,7 @@ import Settings from "./pages/Settings";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { getPrayerTimes } from "./helpers/prayer";
 import dayjs from "dayjs";
-import { PrayerTimeType } from "./types/PrayerTimeType";
+import { PrayerTimeType, Timings } from "./types/PrayerTimeType";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { brainAtom } from "./atoms/brain";
 import { getBrainReply, trainBrain } from "./brain";
@@ -60,6 +60,7 @@ const App: React.FC = () => {
 
   const setupPrayerNotifications = useCallback(async () => {
     const prayerTimes = await getPrayerTimes({ mandatoryPrayersOnly: true });
+    if (!prayerTimes) return;
 
     const prayerNames = Object.keys(prayerTimes!);
     // schedule each five daily prayer notifications
@@ -70,17 +71,16 @@ const App: React.FC = () => {
       const quranPrayerQuote = (
         await getBrainReply(`quranic verse about prayer`)
       ).answer?.toString();
-      const time = dayjs(
-        prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
-      ).toDate();
+      const time = dayjs(prayerTimes![prayerName as keyof Timings]).toDate();
 
       LocalNotifications.schedule({
         notifications: [
           {
             body: prayerQuote[0].answer,
-            id: new Date(prayerTimes[indx]).getTime(),
+            id: new Date(prayerTimes[prayerName as keyof Timings]).getTime(),
             schedule: {
               at: time,
+              allowWhileIdle: true,
             },
             title: prayerQuote[1].answer,
             summaryText: `${prayerName} prayer, nothing else matters.`,
