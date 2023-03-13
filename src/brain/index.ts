@@ -9,6 +9,8 @@ import greetingsCorpus from "./en/greetings";
 import youtubeCorpus from "./en/youtube";
 import onIntent from "./onIntent";
 import themeCorpus from "./en/theme";
+import { atomStore } from "../atoms/store";
+import { brainAtom } from "../atoms/brain";
 
 const corpuses = [
   mainCorpus,
@@ -32,7 +34,12 @@ async function trainBrain(): Promise<any> {
   return nlp;
 }
 
-async function getReply(brain: any, q: string): Promise<Reply> {
+async function getReply(q: string): Promise<Reply> {
+  const brain = atomStore.get(brainAtom);
+
+  if (!brain)
+    throw new Error("You should train your brain first to get a reply.");
+
   const brainResponse = await brain.process("en", removeEmojis(q));
   console.log(brainResponse);
 

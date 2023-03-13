@@ -10,10 +10,10 @@ import { PrayerTimeType } from "../types/PrayerTimeType";
 import axios from "axios";
 import { getPrayerTimeApiUrl, getYouTubeSearchApiUrl } from "../constants/api";
 import { YouTubeSearchResults } from "../types/YouTubeSearchResults";
-import { htmlDecode } from "../herlpers/string";
+import { htmlDecode } from "../helpers/string";
 import { allThemes, setThemeAtom, themeAtom } from "../atoms/theme";
 import { atomStore } from "../atoms/store";
-import { getPrayerTimes } from "../herlpers/prayer";
+import { getPrayerTimes } from "../helpers/prayer";
 import { LocalNotifications } from "@capacitor/local-notifications";
 
 export default async function onIntent(nlp: any, input: Reply) {
