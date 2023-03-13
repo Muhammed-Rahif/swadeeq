@@ -6,17 +6,17 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { TypeAnimation } from "react-type-animation";
-import { getBrainReply, trainBrain } from "../brain";
+import { getBrainReply } from "../brain";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import uuid from "short-uuid";
 import SubhanallahSvg from "../components/SubhanallahSvg";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { brainAtom } from "../atoms/brain";
 
 const botChatAnime: Variants = {

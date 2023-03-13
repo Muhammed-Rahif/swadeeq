@@ -27,7 +27,7 @@ import "./theme/variables.css";
 import "./theme/styles.css";
 import { useCallback, useEffect } from "react";
 import BottomNav from "./components/BottomNav";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { themeAtom } from "./atoms/theme";
 import Donate from "./pages/Donate";
 import Settings from "./pages/Settings";

@@ -1,9 +1,4 @@
-import {
-  IonFooter,
-  IonRouterLink,
-  IonToolbar,
-  useIonRouter,
-} from "@ionic/react";
+import { IonRouterLink, useIonRouter } from "@ionic/react";
 import { IoSettingsSharp, IoHome, IoHeart } from "react-icons/io5";
 
 interface BottomNavProps {}

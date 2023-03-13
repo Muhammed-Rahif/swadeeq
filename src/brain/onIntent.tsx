@@ -1,10 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import dayjs from "dayjs";
 import { BrainReply } from "../types/BrainReply";
-import { PrayerTimeType } from "../types/PrayerTimeType";
 import { setThemeAtom } from "../atoms/theme";
-import { getPrayerTimes } from "../helpers/prayer";
-import { LocalNotifications } from "@capacitor/local-notifications";
 import { changeTheme, whichTheme } from "./onIntents/theme";
 import { islamicRuling, quranReciatation } from "./onIntents/youtube";
 import { prayerTimes, whenItsPrayerTime } from "./onIntents/prayer";
