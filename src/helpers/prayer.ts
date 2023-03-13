@@ -9,6 +9,11 @@ import axios from "axios";
 import { getPrayerTimeApiUrl } from "../constants/api";
 import dayjs from "dayjs";
 
+/**
+ *
+ * Getting prayer times from api
+ * @returns "{ Fajr: string, Sunrise: string, Dhuhr: string, ...}"
+ */
 export async function getPrayerTimes({
   mandatoryPrayersOnly = false,
 }: {
@@ -18,12 +23,14 @@ export async function getPrayerTimes({
   let currentLocation: Position | undefined;
 
   if (Capacitor.isNativePlatform()) {
+    // for android
     const reqForLocation = await NativeGeolocation.requestPermissions();
 
     if (reqForLocation.coarseLocation === "granted") {
       currentLocation = await NativeGeolocation.getCurrentPosition();
     }
   } else {
+    // for web
     currentLocation = await new Promise((resolve, reject) =>
       navigator.geolocation.getCurrentPosition(resolve, reject)
     );
@@ -32,6 +39,7 @@ export async function getPrayerTimes({
   if (currentLocation) {
     try {
       const response = await axios.get(
+        // the api url string
         getPrayerTimeApiUrl({
           latitude: currentLocation.coords.latitude,
           longitude: currentLocation.coords.longitude,
@@ -48,11 +56,13 @@ export async function getPrayerTimes({
         prayerTimes = data.timings;
         const prayerNames = Object.keys(prayerTimes!);
 
+        // convert prayer times to ISO 8601 format
         Object.values(prayerTimes).map((time, indx) => {
           prayerTimes![prayerNames[indx] as keyof PrayerTimeType["timings"]] =
             dayjs(time.substring(0, 25)).toISOString();
         });
 
+        // return only mandatory prayers
         if (mandatoryPrayersOnly) {
           let mandatoryPrayers: any = {};
 
@@ -70,6 +80,7 @@ export async function getPrayerTimes({
           return mandatoryPrayers;
         }
 
+        // return all prayer times such as Imsak, Sunrise, Fajr, Dhuhr, Asr, Maghrib, Isha, Imsak, Midnight
         return prayerTimes;
       }
     } catch (error) {

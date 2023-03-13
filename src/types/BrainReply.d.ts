@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export interface Reply {
+export interface BrainReply {
   locale: string;
   utterance: string;
   languageGuessed: boolean;

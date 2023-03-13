@@ -10,7 +10,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { TypeAnimation } from "react-type-animation";
-import { getReply, trainBrain } from "../brain";
+import { getBrainReply, trainBrain } from "../brain";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -30,7 +30,7 @@ const userChatAnime: Variants = {
 };
 
 type ChatsType = {
-  id: string;
+  id: string | uuid.SUUID;
   by: "bot" | "user";
   message: string | React.ReactNode;
 }[];
@@ -46,29 +46,23 @@ const ChatBot: React.FC = () => {
   const answerWithoutUserInput = useCallback(
     async (q: string) => {
       if (!brain) return;
-      const { answer } = await getReply(brain, q);
+      const { answer } = await getBrainReply(q);
 
+      // if multiple answers is returned
       if (Array.isArray(answer)) {
-        setChats((chats) => [
-          ...chats,
-          ...answer.map(
-            (a) =>
-              ({
-                by: "bot",
-                id: uuid.generate(),
-                message: a,
-              } as any)
-          ),
-        ]);
+        const answersChats: ChatsType = answer.map((a) => ({
+          by: "bot",
+          id: uuid.generate(),
+          message: a,
+        }));
+        setChats((chats) => [...chats, ...answersChats]);
       } else {
-        setChats((chats) => [
-          ...chats,
-          {
-            by: "bot",
-            id: uuid.generate(),
-            message: answer,
-          },
-        ]);
+        const answerChat: ChatsType[0] = {
+          by: "bot",
+          id: uuid.generate(),
+          message: answer,
+        };
+        setChats((chats) => [...chats, answerChat]);
       }
     },
     [brain]
@@ -77,42 +71,36 @@ const ChatBot: React.FC = () => {
   const onUserQuery = useCallback(
     async (query: string) => {
       if (!brain) return;
-      setChats([
-        ...chats,
-        {
-          id: uuid.generate(),
-          by: "user",
-          message: query,
-        },
-      ]);
+      const answerChat: ChatsType[0] = {
+        id: uuid.generate(),
+        by: "user",
+        message: query,
+      };
+      // adding user's query to the chat
+      setChats([...chats, answerChat]);
 
       setIsBotTyping(true);
-      const { answer } = await getReply(brain, query);
+      const { answer } = await getBrainReply(query);
       setIsBotTyping(false);
 
+      // if multiple answers is returned
       if (Array.isArray(answer)) {
-        setChats((chats) => [
-          ...chats,
-          ...answer.map(
-            (a) =>
-              ({
-                by: "bot",
-                id: uuid.generate(),
-                message: a,
-              } as any)
-          ),
-        ]);
+        const answerChats: ChatsType = answer.map((a) => ({
+          by: "bot",
+          id: uuid.generate(),
+          message: a,
+        }));
+        setChats((chats) => [...chats, ...answerChats]);
       } else {
-        setChats((chats) => [
-          ...chats,
-          {
-            by: "bot",
-            id: uuid.generate(),
-            message: answer,
-          },
-        ]);
+        const answerChat: ChatsType[0] = {
+          by: "bot",
+          id: uuid.generate(),
+          message: answer,
+        };
+        setChats((chats) => [...chats, answerChat]);
       }
 
+      // scrolling into bottom of the chat
       contentRef.current?.scrollToBottom(500);
     },
     [brain, chats]
@@ -161,6 +149,7 @@ const ChatBot: React.FC = () => {
                   isLastChatByBot ? "mb-0 before:opacity-0" : ""
                 }`}
               >
+                {/* if message is typeof string */}
                 {typeof message === "string" ? (
                   <ReactMarkdown
                     rehypePlugins={[rehypeRaw]}

@@ -3,7 +3,7 @@ const youtubeCorpus = {
   locale: "en-US",
   data: [
     {
-      intent: "youtube.islamicruling",
+      intent: "youtube.islamicRuling",
       utterances: [
         "get islamic ruling for @subject",
         "what is the islamic ruling on @subject",
@@ -27,7 +27,7 @@ const youtubeCorpus = {
       ],
     },
     {
-      intent: "youtube.quranreciatation",
+      intent: "youtube.quranReciatation",
       utterances: [
         "reciation of surah @quran",
         "quran reciation @quran",
