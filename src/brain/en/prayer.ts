@@ -3,7 +3,7 @@ const prayerCorpus = {
   locale: "en-US",
   data: [
     {
-      intent: "prayer.getquranicverseofprayer",
+      intent: "prayer.getQuranicVerseOfPrayer",
       utterances: [
         "quranic verse about prayer",
         "quran about prayer",
