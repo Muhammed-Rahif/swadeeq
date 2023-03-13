@@ -37,7 +37,7 @@ import dayjs from "dayjs";
 import { PrayerTimeType } from "./types/PrayerTimeType";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { brainAtom } from "./atoms/brain";
-import { getReply, trainBrain } from "./brain";
+import { getBrainReply, trainBrain } from "./brain";
 
 dayjs.extend(relativeTime);
 
@@ -61,12 +61,19 @@ const App: React.FC = () => {
 
   const setupPrayerNotifications = useCallback(async () => {
     const prayerTimes = await getPrayerTimes({ mandatoryPrayersOnly: true });
-    console.log({ prayerTimes });
 
     const prayerNames = Object.keys(prayerTimes!);
+    // schedule each five daily prayer notifications
     prayerNames.map(async (prayerName, indx) => {
-      const prayerQuote = (await getReply(`its time to pray ${prayerName}`))
-        .answers;
+      const prayerQuote = (
+        await getBrainReply(`its time to pray ${prayerName}`)
+      ).answers;
+      const quranPrayerQuote = (
+        await getBrainReply(`quranic verse about prayer`)
+      ).answer?.toString();
+      const time = dayjs(
+        prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
+      ).toDate();
 
       LocalNotifications.schedule({
         notifications: [
@@ -74,23 +81,12 @@ const App: React.FC = () => {
             body: prayerQuote[0].answer,
             id: new Date(prayerTimes[indx]).getTime(),
             schedule: {
-              at: dayjs(
-                prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
-              ).toDate(),
+              at: time,
             },
             title: prayerQuote[1].answer,
             summaryText: `${prayerName} prayer, nothing else matters.`,
-            iconColor: "#FF0000",
             smallIcon: "splash",
-            largeIcon: "prayer",
-            largeBody:
-              '"who believe in the unseen, establish prayer, and donate from what We have provided for them, " - Quran 2:3',
-            attachments: [
-              {
-                id: "splash",
-                url: "prayer",
-              },
-            ],
+            largeBody: quranPrayerQuote,
           },
         ],
       });

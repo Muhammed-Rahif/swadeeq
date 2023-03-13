@@ -10,7 +10,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { TypeAnimation } from "react-type-animation";
-import { getReply, trainBrain } from "../brain";
+import { getBrainReply, trainBrain } from "../brain";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -46,7 +46,7 @@ const ChatBot: React.FC = () => {
   const answerWithoutUserInput = useCallback(
     async (q: string) => {
       if (!brain) return;
-      const { answer } = await getReply(brain, q);
+      const { answer } = await getBrainReply(q);
 
       if (Array.isArray(answer)) {
         setChats((chats) => [
@@ -87,7 +87,7 @@ const ChatBot: React.FC = () => {
       ]);
 
       setIsBotTyping(true);
-      const { answer } = await getReply(brain, query);
+      const { answer } = await getBrainReply(query);
       setIsBotTyping(false);
 
       if (Array.isArray(answer)) {

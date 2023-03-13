@@ -34,7 +34,7 @@ async function trainBrain(): Promise<any> {
   return nlp;
 }
 
-async function getReply(q: string): Promise<Reply> {
+async function getBrainReply(q: string): Promise<Reply> {
   const brain = atomStore.get(brainAtom);
 
   if (!brain)
@@ -46,4 +46,4 @@ async function getReply(q: string): Promise<Reply> {
   return brainResponse;
 }
 
-export { trainBrain, getReply };
+export { trainBrain, getBrainReply };
