@@ -45,7 +45,7 @@ setupIonicReact();
 
 const App: React.FC = () => {
   const theme = useAtomValue(themeAtom);
-  const [brain, setBrain] = useAtom(brainAtom);
+  const brain = useAtomValue(brainAtom);
 
   useEffect(() => {
     async function startUp() {
@@ -53,8 +53,7 @@ const App: React.FC = () => {
       await SplashScreen.hide();
 
       // traning the nlp brain
-      const brain = await trainBrain();
-      setBrain(brain);
+      await trainBrain();
     }
     if (!brain) startUp();
   }, []);

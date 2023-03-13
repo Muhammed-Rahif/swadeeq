@@ -27,7 +27,7 @@ const youtubeCorpus = {
       ],
     },
     {
-      intent: "youtube.quranreciatation",
+      intent: "youtube.quranReciatation",
       utterances: [
         "reciation of surah @quran",
         "quran reciation @quran",

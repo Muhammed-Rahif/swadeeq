@@ -54,7 +54,7 @@ const prayerCorpus = {
       ],
     },
     {
-      intent: "prayer.whenitsprayertime",
+      intent: "prayer.whenItsPrayerTime",
       utterances: [
         "when @prayer prayer time comes",
         "its time to pray @prayer",
@@ -76,7 +76,7 @@ const prayerCorpus = {
       ],
     },
     {
-      intent: "prayer.getprayertimes",
+      intent: "prayer.prayerTimes",
       utterances: [
         "prayer times",
         "get prayer times",

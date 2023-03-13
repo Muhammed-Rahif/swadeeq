@@ -9,6 +9,11 @@ import axios from "axios";
 import { getPrayerTimeApiUrl } from "../constants/api";
 import dayjs from "dayjs";
 
+/**
+ *
+ * Getting prayer times from api
+ * @returns "{ Fajr: string, Sunrise: string, Dhuhr: string, ...}"
+ */
 export async function getPrayerTimes({
   mandatoryPrayersOnly = false,
 }: {
@@ -34,6 +39,7 @@ export async function getPrayerTimes({
   if (currentLocation) {
     try {
       const response = await axios.get(
+        // the api url string
         getPrayerTimeApiUrl({
           latitude: currentLocation.coords.latitude,
           longitude: currentLocation.coords.longitude,
