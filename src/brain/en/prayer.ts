@@ -3,6 +3,28 @@ const prayerCorpus = {
   locale: "en-US",
   data: [
     {
+      intent: "prayer.whenitsprayertime",
+      utterances: [
+        "when @prayer prayer time comes",
+        "its time to pray @prayer",
+        "@prayer pray now",
+        "this is @prayer prayer time",
+        "when @prayer salah time comes",
+        "its time to pray @prayer",
+        "@prayer pray now",
+        "this is @prayer salah time",
+      ],
+      answers: [
+        "It's time to pray <%prayerName%>",
+        "<%prayerName%> prayer, nothing else matters.",
+        "Pray <%prayerName%> now.",
+        "<%prayerName%> is mandatory upon you.",
+        "Nothing else matters, go and pray <%prayerName%>.",
+        "Run to the mosque, it's <%prayerName%> time.",
+        "Go, pray <%prayerName%>. Everything else after that.",
+      ],
+    },
+    {
       intent: "prayer.getprayertimes",
       utterances: [
         "prayer times",
@@ -87,6 +109,35 @@ remain on him whatsoever." The Prophet (peace and blessings be upon him) then sa
       ],
     },
   ],
+  entities: {
+    prayer: {
+      options: {
+        prayerName: [
+          "fajr",
+          "dhuhr",
+          "asr",
+          "maghrib",
+          "ishah",
+          "isha",
+          "magrib",
+          "fajr prayer",
+          "dhuhr prayer",
+          "asr prayer",
+          "maghrib prayer",
+          "magrib prayer",
+          "ishah prayer",
+          "isha prayer",
+          "fajr salah",
+          "dhuhr salah",
+          "asr salah",
+          "maghrib salah",
+          "magrib salah",
+          "ishah salah",
+          "isha salah",
+        ],
+      },
+    },
+  },
 };
 
 export default prayerCorpus;

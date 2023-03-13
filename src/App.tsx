@@ -27,21 +27,80 @@ import "./theme/variables.css";
 import "./theme/styles.css";
 import { useEffect } from "react";
 import BottomNav from "./components/BottomNav";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { themeAtom } from "./atoms/theme";
 import Donate from "./pages/Donate";
 import Settings from "./pages/Settings";
+import { LocalNotifications } from "@capacitor/local-notifications";
+import { getPrayerTimes } from "./herlpers/prayer";
+import dayjs from "dayjs";
+import { PrayerTimeType } from "./types/PrayerTimeType";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { brainAtom } from "./atoms/brain";
+import { getReply, trainBrain } from "./brain";
+
+dayjs.extend(relativeTime);
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const theme = useAtomValue(themeAtom);
+  const [brain, setBrain] = useAtom(brainAtom);
+
+  useEffect(() => {
+    async function load() {
+      const brain = await trainBrain();
+      setBrain(brain);
+    }
+    if (!brain) load();
+  }, []);
 
   useEffect(() => {
     (async () => {
       await SplashScreen.hide();
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (!brain) return;
+
+      const prayerTimes = await getPrayerTimes({ mandatoryPrayersOnly: true });
+      console.log({ prayerTimes });
+
+      const prayerNames = Object.keys(prayerTimes!);
+      prayerNames.map(async (prayerName) => {
+        LocalNotifications.schedule({
+          notifications: [
+            {
+              body: (
+                await getReply(brain, `when ${prayerName} prayer time comes`)
+              ).answer?.toString()!,
+              id: 1,
+              schedule: {
+                at: dayjs(
+                  prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
+                ).toDate(),
+              },
+              title: `Friend, it's ${prayerName} prayer time!`,
+              summaryText: `${prayerName} Prayer, nothing else matters.`,
+              iconColor: "#FF0000",
+              smallIcon: "splash",
+              largeIcon: "prayer",
+              largeBody:
+                '"who believe in the unseen, establish prayer, and donate from what We have provided for them, " - Quran 2:3',
+              attachments: [
+                {
+                  id: "splash",
+                  url: "prayer",
+                },
+              ],
+            },
+          ],
+        });
+      });
+    })();
+  }, [brain]);
 
   return (
     <IonApp>

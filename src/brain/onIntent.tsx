@@ -13,6 +13,8 @@ import { YouTubeSearchResults } from "../types/YouTubeSearchResults";
 import { htmlDecode } from "../herlpers/string";
 import { allThemes, setThemeAtom, themeAtom } from "../atoms/theme";
 import { atomStore } from "../atoms/store";
+import { getPrayerTimes } from "../herlpers/prayer";
+import { LocalNotifications } from "@capacitor/local-notifications";
 
 export default async function onIntent(nlp: any, input: Reply) {
   const output = input;
@@ -56,7 +58,7 @@ export default async function onIntent(nlp: any, input: Reply) {
             className="dropdown-content bg-base-100 capitalize menu p-2 shadow-lg flex-nowrap rounded-box w-52 max-h-72 overflow-y-scroll flex-col overflow-x-hidden"
           >
             {allThemes.map((theme) => (
-              <li key={theme} className="prose">
+              <li key={theme} className="prose max-w-none">
                 <a onClick={() => setThemeAtom(theme)} className="no-underline">
                   {theme}
                 </a>
@@ -117,6 +119,9 @@ export default async function onIntent(nlp: any, input: Reply) {
 
   // ================================ youtube.islamicruling ================================
   else if (input.intent === "youtube.islamicruling") {
+    input.entities = (input.entities as []).filter(
+      ({ entity }) => entity === "subject"
+    );
     if (input.entities.length >= 0 && !Boolean(input.entities[0]))
       return (output.answer = "Please enter a valid topic to search for.");
 
@@ -166,81 +171,75 @@ export default async function onIntent(nlp: any, input: Reply) {
     output.answer = `It is ${time} o'clock.`;
   }
 
+  // ================================ prayer.whenitsprayertime ================================
+  else if (input.intent === "prayer.whenitsprayertime") {
+    input.entities = (input.entities as []).filter(
+      ({ entity }) => entity === "prayer"
+    );
+    const variableRegex = RegExp(`<%[${input.entities[0].option}\\s]+%>`);
+    const answer = (input.answer as string).replace(
+      variableRegex,
+      input.entities[0].utteranceText
+    );
+    output.answer = answer;
+  }
+
   // ================================ prayer.getprayertimes ================================
   else if (input.intent === "prayer.getprayertimes") {
     let prayerTimes: PrayerTimeType["timings"] | undefined;
-    let currentLocation: Position | undefined;
 
-    if (Capacitor.isNativePlatform()) {
-      const reqForLocation = await NativeGeolocation.requestPermissions();
-
-      if (reqForLocation.coarseLocation === "granted") {
-        currentLocation = await NativeGeolocation.getCurrentPosition();
-      }
-    } else {
-      currentLocation = await new Promise((resolve, reject) =>
-        navigator.geolocation.getCurrentPosition(resolve, reject)
-      );
+    try {
+      prayerTimes = await getPrayerTimes({});
+    } catch (err) {
+      output.answer = "Something went wrong. Please try again.";
     }
 
-    if (currentLocation) {
-      try {
-        const response = await axios.get(
-          getPrayerTimeApiUrl({
-            latitude: currentLocation.coords.latitude,
-            longitude: currentLocation.coords.longitude,
-            method: 4,
-            day: new Date().getDate(),
-            month: new Date().getMonth() + 1,
-            year: new Date().getFullYear(),
-            isIso8601: true,
-          })
-        );
+    if (!prayerTimes)
+      return (output.answer = "Something went wrong. Please try again.");
 
-        if (response.data.status === "OK") {
-          const { data }: { data: PrayerTimeType } = response.data;
-          prayerTimes = data.timings;
-          const prayerNames = Object.keys(prayerTimes!);
+    const prayerNames = Object.keys(prayerTimes!);
 
-          Object.values(prayerTimes).map((time, indx) => {
-            prayerTimes![prayerNames[indx] as keyof PrayerTimeType["timings"]] =
-              dayjs(time.substring(0, 25)).toISOString();
-          });
+    prayerNames.map((prayerName) => {
+      LocalNotifications.schedule({
+        notifications: [
+          {
+            body: '"who believe in the unseen, establish prayer, and donate from what We have provided for them, " - Quran 2:3',
+            id: 1,
+            schedule: {
+              at: dayjs(
+                prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
+              ).toDate(),
+            },
+            title: `Friend, it's ${prayerName} prayer time!`,
+            summaryText: `${prayerName} Prayer, nothing else matters.`,
+            iconColor: "#FF0000",
+            smallIcon: "splash",
+            largeIcon: "prayer",
+            largeBody:
+              '"who believe in the unseen, establish prayer, and donate from what We have provided for them, " - Quran 2:3',
+            attachments: [
+              {
+                id: "splash",
+                url: "prayer",
+              },
+            ],
+          },
+        ],
+      });
+    });
 
-          const upcomingPrayers = Object.values(prayerTimes).filter(
-            (time, indx) => {
-              return (
-                ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"].includes(
-                  Object.keys(prayerTimes!)[indx]
-                ) && dayjs(time).isAfter(dayjs())
-              );
-            }
-          );
+    let ans: string[] = prayerNames.map((prayerName) => {
+      return `| ${prayerName} | ${dayjs(
+        prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
+      ).format("h:mm A")} |`;
+    });
+    ans.unshift("| --- | --- |");
+    ans.unshift("| Prayer | Time |");
 
-          let ans: string[] = prayerNames.map((prayerName) => {
-            return `| ${prayerName} | ${dayjs(
-              prayerTimes![prayerName as keyof PrayerTimeType["timings"]]
-            ).format("h:mm A")} |`;
-          });
-          ans.unshift("| --- | --- |");
-          ans.unshift("| Prayer | Time |");
-
-          output.answer = [
-            "Here are the prayer times for today:",
-            ans.join("\n"),
-            "Remember always to pray on time and renew the remembrance of Allah each time!",
-          ];
-        } else {
-          output.answer = "Something went wrong. Please try again.";
-        }
-      } catch (err: any) {
-        console.error(err);
-
-        output.answer = `Something went wrong due to ${err.message}. Please try again.`;
-      }
-    } else {
-      output.answer =
-        "We need your location to show you prayer times. Please allow location permission in your app settings, and try again.";
-    }
+    output.answer = [
+      "Here are the prayer times for today:",
+      ans.join("\n"),
+      "Remember always to pray on time and renew the remembrance of Allah each time!",
+    ];
   }
 }

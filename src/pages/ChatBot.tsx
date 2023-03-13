@@ -16,6 +16,8 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import uuid from "short-uuid";
 import SubhanallahSvg from "../components/SubhanallahSvg";
+import { useAtom, useAtomValue } from "jotai";
+import { brainAtom } from "../atoms/brain";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -39,15 +41,7 @@ const ChatBot: React.FC = () => {
   const contentRef = useRef<HTMLIonContentElement>(null);
   const submitBtnRef = useRef<HTMLButtonElement>(null);
   const [isBotTyping, setIsBotTyping] = useState(false);
-  const [brain, setBrain] = useState<any>();
-
-  useEffect(() => {
-    async function load() {
-      const brain = await trainBrain();
-      setBrain(brain);
-    }
-    if (!brain) load();
-  }, []);
+  const brain = useAtomValue(brainAtom);
 
   const answerWithoutUserInput = useCallback(
     async (q: string) => {
@@ -136,7 +130,7 @@ const ChatBot: React.FC = () => {
         className="ion-padding ![background:transparent]"
         ref={contentRef}
       >
-        <div className="my-3 w-full flex items-center flex-col justify-center text-center prose">
+        <div className="my-3 w-full flex items-center flex-col justify-center text-center prose max-w-none">
           <SubhanallahSvg className="w-40 h-auto m-0 fill-[hsla(var(--b1)/var(--tw-bg-opacity,1))]" />
 
           <div className="divider py-5">
@@ -228,7 +222,7 @@ const ChatBot: React.FC = () => {
 
       <IonFooter className="bg-[hsla(var(--b1)/var(--tw-bg-opacity,1))] pb-4 px-2">
         <div className="flex items-stretch justify-between pt-2 form-control">
-          <div className="input-group prose">
+          <div className="input-group prose max-w-none">
             <textarea
               className="textarea textarea-bordered resize-none w-full mr-1 font-bold"
               placeholder="Say assalamu alaikum..."
