@@ -103,7 +103,7 @@ Features:-
 - The islamic ruling videos are taken from https://www.youtube.com/@assimalhakeem youtube channel
 - Quran reciations are searched in youtube
 
-> _I have tried to only include valid data to the app, I am also a human being: any information that is not valid can be reported on https://github.com/Muhammed-Rahif/swadeeq/issues_
+> _I have tried to only include valid data to the app, I am also a human being: any information that is not valid can be reported on https://github.com/Muhammed-Rahif/swadeeq/issues_, and highly encourage that to report as soon as possible with clear evidences.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
