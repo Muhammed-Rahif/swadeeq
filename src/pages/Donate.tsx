@@ -18,7 +18,7 @@ export default function Donate() {
         style={{ "--background": "hsla(var(--b1) / var(--tw-bg-opacity, 1))" }}
         className="ion-padding ![background:transparent] "
       >
-        <div className="prose">
+        <div className="prose max-w-none">
           <h2 className="mt-0 mb-3">
             Introduction to the <br />
             <big>

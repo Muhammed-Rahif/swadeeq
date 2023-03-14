@@ -23,7 +23,7 @@ export default function Settings() {
         style={{ "--background": "hsla(var(--b1) / var(--tw-bg-opacity, 1))" }}
         className="ion-padding ![background:transparent] "
       >
-        <div className="prose">
+        <div className="prose max-w-none">
           <h2 className="mb-0">Theme</h2>
           <div className="divider mb-0" />
 

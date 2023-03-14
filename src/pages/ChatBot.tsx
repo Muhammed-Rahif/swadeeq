@@ -6,16 +6,18 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { motion, Variants } from "framer-motion";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { TypeAnimation } from "react-type-animation";
-import { getReply, trainBrain } from "../brain";
+import { getBrainReply } from "../brain";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import uuid from "short-uuid";
 import SubhanallahSvg from "../components/SubhanallahSvg";
+import { useAtomValue } from "jotai";
+import { brainAtom } from "../atoms/brain";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -28,7 +30,7 @@ const userChatAnime: Variants = {
 };
 
 type ChatsType = {
-  id: string;
+  id: string | uuid.SUUID;
   by: "bot" | "user";
   message: string | React.ReactNode;
 }[];
@@ -39,42 +41,28 @@ const ChatBot: React.FC = () => {
   const contentRef = useRef<HTMLIonContentElement>(null);
   const submitBtnRef = useRef<HTMLButtonElement>(null);
   const [isBotTyping, setIsBotTyping] = useState(false);
-  const [brain, setBrain] = useState<any>();
-
-  useEffect(() => {
-    async function load() {
-      const brain = await trainBrain();
-      setBrain(brain);
-    }
-    if (!brain) load();
-  }, []);
+  const brain = useAtomValue(brainAtom);
 
   const answerWithoutUserInput = useCallback(
     async (q: string) => {
       if (!brain) return;
-      const { answer } = await getReply(brain, q);
+      const { answer } = await getBrainReply(q);
 
+      // if multiple answers is returned
       if (Array.isArray(answer)) {
-        setChats((chats) => [
-          ...chats,
-          ...answer.map(
-            (a) =>
-              ({
-                by: "bot",
-                id: uuid.generate(),
-                message: a,
-              } as any)
-          ),
-        ]);
+        const answersChats: ChatsType = answer.map((a) => ({
+          by: "bot",
+          id: uuid.generate(),
+          message: a,
+        }));
+        setChats((chats) => [...chats, ...answersChats]);
       } else {
-        setChats((chats) => [
-          ...chats,
-          {
-            by: "bot",
-            id: uuid.generate(),
-            message: answer,
-          },
-        ]);
+        const answerChat: ChatsType[0] = {
+          by: "bot",
+          id: uuid.generate(),
+          message: answer,
+        };
+        setChats((chats) => [...chats, answerChat]);
       }
     },
     [brain]
@@ -83,42 +71,36 @@ const ChatBot: React.FC = () => {
   const onUserQuery = useCallback(
     async (query: string) => {
       if (!brain) return;
-      setChats([
-        ...chats,
-        {
-          id: uuid.generate(),
-          by: "user",
-          message: query,
-        },
-      ]);
+      const answerChat: ChatsType[0] = {
+        id: uuid.generate(),
+        by: "user",
+        message: query,
+      };
+      // adding user's query to the chat
+      setChats([...chats, answerChat]);
 
       setIsBotTyping(true);
-      const { answer } = await getReply(brain, query);
+      const { answer } = await getBrainReply(query);
       setIsBotTyping(false);
 
+      // if multiple answers is returned
       if (Array.isArray(answer)) {
-        setChats((chats) => [
-          ...chats,
-          ...answer.map(
-            (a) =>
-              ({
-                by: "bot",
-                id: uuid.generate(),
-                message: a,
-              } as any)
-          ),
-        ]);
+        const answerChats: ChatsType = answer.map((a) => ({
+          by: "bot",
+          id: uuid.generate(),
+          message: a,
+        }));
+        setChats((chats) => [...chats, ...answerChats]);
       } else {
-        setChats((chats) => [
-          ...chats,
-          {
-            by: "bot",
-            id: uuid.generate(),
-            message: answer,
-          },
-        ]);
+        const answerChat: ChatsType[0] = {
+          by: "bot",
+          id: uuid.generate(),
+          message: answer,
+        };
+        setChats((chats) => [...chats, answerChat]);
       }
 
+      // scrolling into bottom of the chat
       contentRef.current?.scrollToBottom(500);
     },
     [brain, chats]
@@ -136,7 +118,7 @@ const ChatBot: React.FC = () => {
         className="ion-padding ![background:transparent]"
         ref={contentRef}
       >
-        <div className="my-3 w-full flex items-center flex-col justify-center text-center prose">
+        <div className="my-3 w-full flex items-center flex-col justify-center text-center prose max-w-none">
           <SubhanallahSvg className="w-40 h-auto m-0 fill-[hsla(var(--b1)/var(--tw-bg-opacity,1))]" />
 
           <div className="divider py-5">
@@ -167,6 +149,7 @@ const ChatBot: React.FC = () => {
                   isLastChatByBot ? "mb-0 before:opacity-0" : ""
                 }`}
               >
+                {/* if message is typeof string */}
                 {typeof message === "string" ? (
                   <ReactMarkdown
                     rehypePlugins={[rehypeRaw]}
@@ -228,7 +211,7 @@ const ChatBot: React.FC = () => {
 
       <IonFooter className="bg-[hsla(var(--b1)/var(--tw-bg-opacity,1))] pb-4 px-2">
         <div className="flex items-stretch justify-between pt-2 form-control">
-          <div className="input-group prose">
+          <div className="input-group prose max-w-none">
             <textarea
               className="textarea textarea-bordered resize-none w-full mr-1 font-bold"
               placeholder="Say assalamu alaikum..."

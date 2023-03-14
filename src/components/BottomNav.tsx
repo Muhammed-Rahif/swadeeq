@@ -1,9 +1,4 @@
-import {
-  IonFooter,
-  IonRouterLink,
-  IonToolbar,
-  useIonRouter,
-} from "@ionic/react";
+import { IonRouterLink, useIonRouter } from "@ionic/react";
 import { IoSettingsSharp, IoHome, IoHeart } from "react-icons/io5";
 
 interface BottomNavProps {}
@@ -27,7 +22,7 @@ const BottomNav: React.FC<BottomNavProps> = () => {
   const router = useIonRouter();
 
   return (
-    <div className="btm-nav">
+    <div className="btm-nav duration-300">
       {navs.map((nav, index) => (
         <IonRouterLink
           className={`text-current ${
