@@ -32,6 +32,10 @@ const dhikrs: DhikrType[] = [
     period: [
       {
         start: "6:30 AM",
+        end: "7:30 AM",
+      },
+      {
+        start: "6:30 PM",
         end: "7:30 PM",
       },
     ],
@@ -39,7 +43,24 @@ const dhikrs: DhikrType[] = [
     subtitle: `Allah will grant whoever recites this seven 
     times in the morning or evening whatever he desires from 
     this world or the next`,
-    description: "",
+    description: `
+    Ḥasbiyallāhu lā ilāha illā huwa \`alayhi tawakkalt,
+    wa huwa Rabbu ‘l-\`Arshi ‘l-'Aẓīm.
+
+    Allah is sufficient for me. There is none worthy of worship but Him.
+    I have placed my trust in Him, He is Lord of the Majestic Throne.
+    (Recite seven times in Arabic.)
+
+    Reference:
+    Allah will grant whoever recites this seven times in the morning 
+    or evening whatever he desires from this world or the next, Ibn 
+    As-Sunni (no. 71), Abu Dawud 4/321. Both reports are attributed 
+    directly to the Prophet j§ (Marfu1). The chain of transmission 
+    is sound (Sahih). Ibn As-Sunni.
+
+    حَسْبِـيَ اللّهُ لا إلهَ إلاّ هُوَ عَلَـيهِ تَوَكَّـلتُ وَهُوَ رَبُّ العَرْشِ العَظـيم. (سبع مرات)
+
+    Reference	 : Hisn al-Muslim 83`,
     hadithRef: "Hisn al-Muslim 83",
     hadithRefUrl: "https://sunnah.com/hisn/84",
     hadithGrade: "Sahih",

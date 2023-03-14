@@ -1,10 +1,22 @@
 import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonChip,
   IonContent,
   IonFooter,
   IonHeader,
+  IonIcon,
+  IonNavLink,
   IonPage,
+  IonText,
+  IonTextarea,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from "@ionic/react";
 import React, { useState, useCallback, useRef } from "react";
 import { motion, Variants } from "framer-motion";
@@ -18,6 +30,8 @@ import uuid from "short-uuid";
 import SubhanallahSvg from "../components/SubhanallahSvg";
 import { useAtomValue } from "jotai";
 import { brainAtom } from "../atoms/brain";
+import Settings from "./Settings";
+import { sendOutline } from "ionicons/icons";
 
 const botChatAnime: Variants = {
   initial: { x: "-10%", opacity: 0, scale: 1.068 },
@@ -37,9 +51,9 @@ type ChatsType = {
 
 const ChatBot: React.FC = () => {
   const [chats, setChats] = useState([] as ChatsType);
-  const textBox = useRef<HTMLTextAreaElement>(null);
+  const textBox = useRef<HTMLIonTextareaElement>(null);
   const contentRef = useRef<HTMLIonContentElement>(null);
-  const submitBtnRef = useRef<HTMLButtonElement>(null);
+  const submitBtnRef = useRef<HTMLIonButtonElement>(null);
   const [isBotTyping, setIsBotTyping] = useState(false);
   const brain = useAtomValue(brainAtom);
 
@@ -101,7 +115,9 @@ const ChatBot: React.FC = () => {
       }
 
       // scrolling into bottom of the chat
-      contentRef.current?.scrollToBottom(500);
+      setTimeout(() => {
+        contentRef.current?.scrollToBottom(500);
+      }, 250);
     },
     [brain, chats]
   );
@@ -113,26 +129,20 @@ const ChatBot: React.FC = () => {
           <IonTitle>Home</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent
-        style={{ "--background": "hsla(var(--b1) / var(--tw-bg-opacity, 1))" }}
-        className="ion-padding ![background:transparent]"
-        ref={contentRef}
-      >
+      <IonContent className="ion-padding" ref={contentRef}>
         <div className="my-3 w-full flex items-center flex-col justify-center text-center prose max-w-none">
-          <SubhanallahSvg className="w-40 h-auto m-0 fill-[hsla(var(--b1)/var(--tw-bg-opacity,1))]" />
+          {/* <SubhanallahSvg className="w-40 h-auto m-0 fill-[hsla(var(--b1)/var(--tw-bg-opacity,1))]" /> */}
 
-          <div className="divider py-5">
+          <IonText color="dark">
             <p className="text-xs m-0">
               In the name of Allah,
               <br /> the Entirely Merciful the Especially Merciful
             </p>
-          </div>
+          </IonText>
         </div>
 
         {chats.map(({ by, id, message }, indx) => {
-          const isLastChatByBot = chats[indx + 1]?.by === "bot";
-          const isLastChatByUser = chats[indx + 1]?.by === "user";
-
+          // if bot is typing
           return by === "bot" ? (
             <motion.div
               key={indx}
@@ -140,14 +150,11 @@ const ChatBot: React.FC = () => {
               initial="initial"
               animate="animate"
               transition={{ duration: 0.2, ease: "circOut" }}
-              className={`chat gap-0 duration-200 chat-start ${
-                isLastChatByBot ? "pb-0" : ""
-              }`}
+              className="flex justify-start duration-200"
             >
-              <div
-                className={`chat-bubble py-3 duration-200 ${
-                  isLastChatByBot ? "mb-0 before:opacity-0" : ""
-                }`}
+              <IonChip
+                color="dark"
+                className="max-h-none max-w-[80%] h-auto inline-block"
               >
                 {/* if message is typeof string */}
                 {typeof message === "string" ? (
@@ -165,26 +172,24 @@ const ChatBot: React.FC = () => {
                 ) : (
                   message
                 )}
-              </div>
+              </IonChip>
             </motion.div>
           ) : (
+            // if user is typing
             <motion.div
               key={indx}
               variants={userChatAnime}
               initial="initial"
               animate="animate"
               transition={{ duration: 0.2, ease: "circOut" }}
-              className={`chat gap-0 chat-end duration-200 ease-linear ${
-                isLastChatByUser ? "pb-0" : ""
-              }`}
+              className="flex justify-end duration-200 ease-linear"
             >
-              <div
-                className={`chat-bubble duration-200 ease-linear bg-primary/90 text-primary-content ${
-                  isLastChatByUser ? "mb-0 before:opacity-0" : ""
-                }`}
+              <IonChip
+                color="primary"
+                className="max-h-none max-w-[80%] h-auto inline-block"
               >
                 {message}
-              </div>
+              </IonChip>
             </motion.div>
           );
         })}
@@ -207,12 +212,48 @@ const ChatBot: React.FC = () => {
             </div>
           </motion.div>
         )}
+
+        <div className="fixed bottom-0 left-0 w-screen border-t border-neutral-400/20">
+          <div className="relative px-4">
+            <IonTextarea
+              placeholder="Say assalamu alaikum..."
+              rows={1}
+              className="h-14 !bg-[var(--ion-color-medium-contrast)]"
+              ref={textBox}
+              autofocus
+              onFocus={() =>
+                setTimeout(() => {
+                  contentRef.current?.scrollToBottom(500);
+                }, 250)
+              }
+            ></IonTextarea>
+            <IonButton
+              fill="clear"
+              size="default"
+              className="absolute top-0 right-0 z-20"
+              onClick={() => {
+                if (!textBox.current?.value?.trim())
+                  return textBox.current?.focus();
+
+                const userQuery = textBox.current.value.trim();
+                textBox.current.focus();
+                textBox.current.value = "";
+                onUserQuery(userQuery);
+              }}
+              ref={submitBtnRef}
+              // className={`btn px-5 ${!Boolean(brain) && "loading"}`}
+            >
+              <IonIcon slot="icon-only" icon={sendOutline}></IonIcon>
+            </IonButton>
+          </div>
+        </div>
+
+        <div className="w-full h-12" />
       </IonContent>
 
-      <IonFooter className="bg-[hsla(var(--b1)/var(--tw-bg-opacity,1))] pb-4 px-2">
-        <div className="flex items-stretch justify-between pt-2 form-control">
+      {/* <div className="flex items-stretch justify-between pt-2 form-control">
           <div className="input-group prose max-w-none">
-            <textarea
+            {/* <textarea
               className="textarea textarea-bordered resize-none w-full mr-1 font-bold"
               placeholder="Say assalamu alaikum..."
               rows={1}
@@ -223,26 +264,10 @@ const ChatBot: React.FC = () => {
                   contentRef.current?.scrollToBottom(500);
                 }, 250)
               }
-            ></textarea>
+            ></textarea> */}
 
-            <button
-              onClick={() => {
-                if (!textBox.current?.value.trim())
-                  return textBox.current?.focus();
-
-                const userQuery = textBox.current.value.trim();
-                textBox.current.focus();
-                textBox.current.value = "";
-                onUserQuery(userQuery);
-              }}
-              ref={submitBtnRef}
-              className={`btn px-5 ${!Boolean(brain) && "loading"}`}
-            >
-              <RiSendPlane2Line size={18} />
-            </button>
-          </div>
-        </div>
-      </IonFooter>
+      {/* </div>
+        </div> */}
     </IonPage>
   );
 };

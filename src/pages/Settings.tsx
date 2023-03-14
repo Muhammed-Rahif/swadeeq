@@ -9,7 +9,7 @@ import {
 import { useAtomValue } from "jotai";
 import { allThemes, setThemeAtom, themeAtom } from "../atoms/theme";
 
-export default function Settings() {
+const Settings: React.FC = () => {
   const theme = useAtomValue(themeAtom);
 
   return (
@@ -19,10 +19,7 @@ export default function Settings() {
           <IonTitle>Settings</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent
-        style={{ "--background": "hsla(var(--b1) / var(--tw-bg-opacity, 1))" }}
-        className="ion-padding ![background:transparent] "
-      >
+      <IonContent className="ion-padding">
         <div className="prose max-w-none">
           <h2 className="mb-0">Theme</h2>
           <div className="divider mb-0" />
@@ -58,4 +55,6 @@ export default function Settings() {
       </IonContent>
     </IonPage>
   );
-}
+};
+
+export default Settings;
