@@ -92,7 +92,7 @@
   "devDependencies": {
     "@capacitor/cli": "4.7.0",
     "assert": "^2.0.0",
-    "autoprefixer": "^10.4.13",
+    "autoprefixer": "^10.4.14",
     "browserify": "^17.0.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
