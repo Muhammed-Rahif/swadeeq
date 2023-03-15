@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&family=Manjari:wght@100;400;700&display=swap");
 
 * {
-  font-family: "Baloo Bhaijaan 2", cursive;
+  font-family: "Manjari", sans-serif;
 }
 
 ion-router-outlet > .ion-page {
@@ -17,10 +17,12 @@ ion-router-outlet > .ion-page-hidden {
 @keyframes fadeIn {
   0% {
     transform: translate3d(100vw, 0, 0);
+    visibility: hidden;
   }
 
   100% {
     transform: translate3d(0, 0, 0);
+    visibility: visible;
   }
 }
 
@@ -28,10 +30,12 @@ ion-router-outlet > .ion-page-hidden {
   0% {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    visibility: visible;
   }
 
   100% {
     opacity: 0;
     transform: translate3d(0, 0, 0);
+    visibility: hidden;
   }
 }
