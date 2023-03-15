@@ -154,7 +154,7 @@ const ChatBot: React.FC = () => {
             >
               <IonChip
                 color="dark"
-                className="max-h-none max-w-[80%] h-auto inline-block"
+                className="max-h-none max-w-[80%] h-auto inline-block text-base"
               >
                 {/* if message is typeof string */}
                 {typeof message === "string" ? (
@@ -186,7 +186,7 @@ const ChatBot: React.FC = () => {
             >
               <IonChip
                 color="primary"
-                className="max-h-none max-w-[80%] h-auto inline-block"
+                className="max-h-none max-w-[80%] h-auto inline-block text-base"
               >
                 {message}
               </IonChip>
@@ -233,10 +233,10 @@ const ChatBot: React.FC = () => {
               className="absolute top-0 right-0 z-20"
               onClick={() => {
                 if (!textBox.current?.value?.trim())
-                  return textBox.current?.focus();
+                  return textBox.current?.setFocus();
 
                 const userQuery = textBox.current.value.trim();
-                textBox.current.focus();
+                textBox.current.setFocus();
                 textBox.current.value = "";
                 onUserQuery(userQuery);
               }}
