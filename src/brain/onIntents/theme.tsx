@@ -16,6 +16,10 @@ export const whichTheme = async (input: BrainReply): Promise<BrainReply> => {
       )
     : "";
 
+  input.answers = input.answers.map(({ answer }) => ({
+    answer: answer.replace(variableRegex, `'**${atomStore.get(themeAtom)}**'`),
+  }));
+
   return input;
 };
 

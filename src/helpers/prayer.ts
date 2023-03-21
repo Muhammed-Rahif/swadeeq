@@ -68,8 +68,6 @@ export async function getPrayerTimes({
           let mandatoryPrayers: any = {};
 
           Object.values(prayerTimes).map((time, indx) => {
-            console.log(Object.keys(prayerTimes!)[indx]);
-
             if (
               ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"].includes(
                 Object.keys(prayerTimes!)[indx]

@@ -90,47 +90,13 @@ const App: React.FC = () => {
     if (!brain) startUp();
   }, []);
 
-  const setupPrayerNotifications = useCallback(async () => {
-    const prayerTimes = await getPrayerTimes({ mandatoryPrayersOnly: true });
-    if (!prayerTimes) return;
-
-    const prayerNames = Object.keys(prayerTimes!);
-    // schedule each five daily prayer notifications
-    prayerNames.map(async (prayerName, indx) => {
-      const prayerQuote = (
-        await getBrainReply(`its time to pray ${prayerName}`)
-      ).answers;
-      const quranPrayerQuote = (
-        await getBrainReply(`quranic verse about prayer`)
-      ).answer?.toString();
-      const time = dayjs(prayerTimes![prayerName as keyof Timings]).toDate();
-
-      LocalNotifications.schedule({
-        notifications: [
-          {
-            body: prayerQuote[0].answer,
-            id: new Date(prayerTimes[prayerName as keyof Timings]).getTime(),
-            schedule: {
-              at: time,
-              allowWhileIdle: true,
-            },
-            title: prayerQuote[1].answer,
-            summaryText: `${prayerName} prayer, nothing else matters.`,
-            smallIcon: "splash",
-            largeBody: quranPrayerQuote,
-          },
-        ],
-      });
-    });
-  }, []);
-
   useEffect(() => {
     (async () => {
       if (!brain) return;
 
-      await setupPrayerNotifications();
+      await getBrainReply("get prayer times");
     })();
-  }, [brain, setupPrayerNotifications]);
+  }, [brain]);
 
   useEffect(() => {
     if (!theme) return;
@@ -152,7 +118,7 @@ const App: React.FC = () => {
 
           <IonTabBar slot="bottom">
             {tabRoutes.map(({ name, path, icon }, index) => (
-              <IonTabButton tab={path} href={path}>
+              <IonTabButton tab={path} href={path} key={index}>
                 <IonIcon aria-hidden="true" icon={icon} />
                 <IonLabel>{name}</IonLabel>
               </IonTabButton>
