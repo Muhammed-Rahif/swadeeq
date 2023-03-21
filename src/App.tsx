@@ -3,7 +3,6 @@ import {
   IonApp,
   IonIcon,
   IonLabel,
-  IonRouterLink,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
@@ -35,16 +34,13 @@ import ChatBot from "./pages/ChatBot";
 /* Theme variables */
 import "./theme/variables.css";
 import "./theme/styles.css";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import BottomNav from "./components/BottomNav";
 import { useAtomValue } from "jotai";
 import { themeAtom } from "./atoms/theme";
 import Donate from "./pages/Donate";
 import Settings from "./pages/Settings";
-import { LocalNotifications } from "@capacitor/local-notifications";
-import { getPrayerTimes } from "./helpers/prayer";
 import dayjs from "dayjs";
-import { Timings } from "./types/PrayerTimeType";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { brainAtom } from "./atoms/brain";
 import { getBrainReply, trainBrain } from "./brain";
