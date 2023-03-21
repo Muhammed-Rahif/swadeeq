@@ -1,4 +1,11 @@
-import { IonRouterLink, useIonRouter } from "@ionic/react";
+import {
+  IonIcon,
+  IonLabel,
+  IonRouterLink,
+  IonTabBar,
+  IonTabButton,
+  useIonRouter,
+} from "@ionic/react";
 import { IoSettingsSharp, IoHome, IoHeart } from "react-icons/io5";
 
 interface BottomNavProps {}
@@ -6,35 +13,42 @@ interface BottomNavProps {}
 const navs = [
   {
     path: "/chat-bot",
-    icon: <IoHome />,
+    icon: "home-outline",
+    name: "Home",
   },
   {
     path: "/donate",
-    icon: <IoHeart />,
+    icon: "heart-outline",
+    name: "Donate",
   },
   {
     path: "/settings",
-    icon: <IoSettingsSharp />,
+    icon: "cog-outline",
+    name: "Settings",
   },
 ];
 
 const BottomNav: React.FC<BottomNavProps> = () => {
-  const router = useIonRouter();
-
   return (
-    <div className="btm-nav duration-300">
-      {navs.map((nav, index) => (
-        <IonRouterLink
-          className={`text-current ${
-            router.routeInfo.pathname === nav.path ? "active" : ""
-          }`}
-          routerLink={nav.path}
-          key={index}
-        >
-          {nav.icon}
-        </IonRouterLink>
-      ))}
-    </div>
+    <IonTabBar slot="bottom">
+      <div className="btm-nav duration-300">
+        {navs.map(({ name, path, icon }, index) => (
+          <IonTabButton tab="tab1" href={path}>
+            <IonIcon aria-hidden="true" icon={icon} />
+            <IonLabel>{name}</IonLabel>
+          </IonTabButton>
+          // <IonRouterLink
+          //   className={`text-current ${
+          //     router.routeInfo.pathname === nav.path ? "active" : ""
+          //   }`}
+          //   routerLink={nav.path}
+          //   key={index}
+          // >
+          //   {nav.icon}
+          // </IonRouterLink>
+        ))}
+      </div>
+    </IonTabBar>
   );
 };
 
