@@ -163,7 +163,10 @@ const ChatBot: React.FC = () => {
                     remarkPlugins={[remarkGfm]}
                     components={{
                       table: ({ node, ...props }) => (
-                        <table {...props} className="table table-compact" />
+                        <table
+                          {...props}
+                          className="table table-fixed [&>tbody>tr>td]:p-1"
+                        />
                       ),
                     }}
                   >
