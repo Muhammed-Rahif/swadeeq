@@ -1,3 +1,24 @@
+# [1.1.0](https://github.com/Muhammed-Rahif/swadeeq/compare/v1.0.3...v1.1.0) (2023-03-21)
+
+
+### Bug Fixes
+
+* **intents:** type intent issues ([cb5066c](https://github.com/Muhammed-Rahif/swadeeq/commit/cb5066c942fd693b523c1d9a11cbee2b01c027af))
+* **notifications:** prayer times notification issue ([e92ce3f](https://github.com/Muhammed-Rahif/swadeeq/commit/e92ce3ffb7b5b92f87aaa84363fb2f4799130467))
+* **prayer:** prayer times table padding ([d038691](https://github.com/Muhammed-Rahif/swadeeq/commit/d03869154b6bca798672254b6c0ab4bc13ca4837))
+* **settings:** theme selector ([0f1cf2e](https://github.com/Muhammed-Rahif/swadeeq/commit/0f1cf2e753849fc2e7d6ff0541e4ba9976847bd4))
+
+
+### Features
+
+* **corpus:** add 'prayer.getquranicverseofprayer' ([b325daf](https://github.com/Muhammed-Rahif/swadeeq/commit/b325daf4d261e9cf3b639b3a5cefd803347fa194))
+* **font:** change font to 'manjari' ([36001ea](https://github.com/Muhammed-Rahif/swadeeq/commit/36001eaf83a51749cc6880f535d3bc35bd88119e))
+* **ios:** ios theme migration ([b779893](https://github.com/Muhammed-Rahif/swadeeq/commit/b7798938d91ec82a63e5331eb44121e9d48ba48b))
+* **notifications:** prayer notifications ([e7041fe](https://github.com/Muhammed-Rahif/swadeeq/commit/e7041fedc6e1d459650f68ee8b67d2594ccb28a5))
+* **prayer:** prayer time notifications ([8945d8e](https://github.com/Muhammed-Rahif/swadeeq/commit/8945d8e2e78f3424e7fc9b060587a0667b8604bb))
+
+
+
 ## [1.0.3](https://github.com/Muhammed-Rahif/swadeeq/compare/v1.0.2...v1.0.3) (2023-03-12)
 
 
