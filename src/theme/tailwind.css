@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.chat-bubble blockquote {
+ion-chip blockquote {
   margin: 0.6rem 0;
   padding-left: 8px;
   border-left: #e2e8f065 4px solid;

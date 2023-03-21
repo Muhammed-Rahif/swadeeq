@@ -1,5 +1,14 @@
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import {
+  IonApp,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  setupIonicReact,
+} from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { SplashScreen } from "@capacitor/splash-screen";
 
@@ -31,23 +40,70 @@ import { useAtomValue } from "jotai";
 import { themeAtom } from "./atoms/theme";
 import Donate from "./pages/Donate";
 import Settings from "./pages/Settings";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { brainAtom } from "./atoms/brain";
+import { getBrainReply, trainBrain } from "./brain";
 
-setupIonicReact();
+import { home, cog, heart } from "ionicons/icons";
+
+dayjs.extend(relativeTime);
+
+setupIonicReact({
+  mode: "ios",
+});
+
+const tabRoutes = [
+  {
+    path: "/chat-bot",
+    icon: home,
+    name: "Home",
+  },
+  {
+    path: "/donate",
+    icon: heart,
+    name: "Donate",
+  },
+  {
+    path: "/settings",
+    icon: cog,
+    name: "Settings",
+  },
+];
 
 const App: React.FC = () => {
+  const brain = useAtomValue(brainAtom);
   const theme = useAtomValue(themeAtom);
 
   useEffect(() => {
-    (async () => {
+    async function startUp() {
+      // hide splash screen manually
       await SplashScreen.hide();
-    })();
+
+      // traning the nlp brain
+      await trainBrain();
+    }
+    if (!brain) startUp();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (!brain) return;
+
+      await getBrainReply("get prayer times");
+    })();
+  }, [brain]);
+
+  useEffect(() => {
+    if (!theme) return;
+    document.body.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   return (
     <IonApp>
       <IonReactRouter>
-        <div data-theme={theme}>
-          <IonRouterOutlet className="mb-16">
+        <IonTabs>
+          <IonRouterOutlet>
             <Route exact path="/">
               <Redirect to="/chat-bot" />
             </Route>
@@ -56,8 +112,16 @@ const App: React.FC = () => {
             <Route path="/settings" component={Settings} />
           </IonRouterOutlet>
 
+          <IonTabBar slot="bottom">
+            {tabRoutes.map(({ name, path, icon }, index) => (
+              <IonTabButton tab={path} href={path} key={index}>
+                <IonIcon aria-hidden="true" icon={icon} />
+                <IonLabel>{name}</IonLabel>
+              </IonTabButton>
+            ))}
+          </IonTabBar>
           <BottomNav />
-        </div>
+        </IonTabs>
       </IonReactRouter>
     </IonApp>
   );

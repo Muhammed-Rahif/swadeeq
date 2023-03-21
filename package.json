@@ -9,6 +9,7 @@
     "@capacitor/geolocation": "^4.1.0",
     "@capacitor/haptics": "4.1.0",
     "@capacitor/keyboard": "4.1.1",
+    "@capacitor/local-notifications": "^4.1.5",
     "@capacitor/splash-screen": "^4.2.0",
     "@capacitor/status-bar": "4.1.1",
     "@craco/craco": "^7.0.0",
@@ -108,5 +109,5 @@
     "terser": "^5.16.5",
     "url": "^0.11.0"
   },
-  "description": "An Ionic project"
+  "description": "Swadeeq is a chat bot, developed to help muslims to be consistent on deen."
 }

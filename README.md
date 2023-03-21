@@ -93,7 +93,17 @@ Features:-
 - Replying with hadiths and surah ayahs, or surah info
 - Basic knowledge about Islam and Tawheed
 
-<!-- Use the `BLANK_README.md` to get started. -->
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## **❗ Informations used**
+
+- The quranic verses are used in this app is taken from https://quran.com - Translation is "Dr. Mustafa Khattab, the Clear Quran"
+- Sunnah and hadiths and mentions in this app is taken from https://sunnah.com
+- Prayer times(fajr, dhuhr, asr, maghrid, ishah) including sunrise, sunset firstthird, midnight, lastthird, imsak are fetching from https://aladhan.com and https://api.aladhan.com
+- The islamic ruling videos are taken from https://www.youtube.com/@assimalhakeem youtube channel
+- Quran reciations are searched in youtube
+
+> _I have tried to only include valid data to the app, I am also a human being: any information that is not valid can be reported on https://github.com/Muhammed-Rahif/swadeeq/issues_, and highly encourage that to report as soon as possible with clear evidences.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -107,10 +117,6 @@ Major frameworks/libraries used to bootstrap the project.
 - [![Capacitor][capacitor]][capacitor-url]
 - [![Tailwind CSS][tailwind-css]][tailwind-css-url]
 - [![DaisyUi][daisyui]][daisyui-url]
-
-Ui inspired from https://dribbble.com/shots/17114459-Chatbot-your-personal-shopping-assistant
-
-<!-- https://cdn.dribbble.com/users/1147769/screenshots/17114459/media/e6719b6d98776cc75adcfcfb6812277d.png -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

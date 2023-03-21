@@ -6,7 +6,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 
-export default function Donate() {
+const Donate: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
@@ -14,11 +14,8 @@ export default function Donate() {
           <IonTitle>Donate</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent
-        style={{ "--background": "hsla(var(--b1) / var(--tw-bg-opacity, 1))" }}
-        className="ion-padding ![background:transparent] "
-      >
-        <div className="prose">
+      <IonContent className="ion-padding">
+        <div className="prose max-w-none">
           <h2 className="mt-0 mb-3">
             Introduction to the <br />
             <big>
@@ -141,4 +138,6 @@ export default function Donate() {
       </IonContent>
     </IonPage>
   );
-}
+};
+
+export default Donate;

@@ -2,13 +2,15 @@ import { containerBootstrap } from "@nlpjs/core";
 import { Nlp } from "@nlpjs/nlp";
 import { LangEn } from "@nlpjs/lang-en-min";
 import { removeEmojis } from "@nlpjs/emoji";
-import { Reply } from "../types/Reply";
+import { BrainReply } from "../types/BrainReply";
 import prayerCorpus from "./en/prayer";
 import mainCorpus from "./en/main";
 import greetingsCorpus from "./en/greetings";
 import youtubeCorpus from "./en/youtube";
 import onIntent from "./onIntent";
 import themeCorpus from "./en/theme";
+import { atomStore } from "../atoms/store";
+import { brainAtom } from "../atoms/brain";
 
 const corpuses = [
   mainCorpus,
@@ -29,13 +31,21 @@ async function trainBrain(): Promise<any> {
   nlp.onIntent = onIntent;
 
   await nlp.train();
+
+  atomStore.set(brainAtom, nlp);
   return nlp;
 }
 
-async function getReply(brain: any, q: string): Promise<Reply> {
-  const brainResponse = await brain.process("en", removeEmojis(q));
+async function getBrainReply(q: string): Promise<BrainReply> {
+  const brain = atomStore.get(brainAtom);
 
-  return brainResponse;
+  if (!brain)
+    throw new Error("You should train your brain first to get a reply.");
+
+  const brainReply = await brain.process("en", removeEmojis(q));
+  console.log(brainReply);
+
+  return brainReply;
 }
 
-export { trainBrain, getReply };
+export { trainBrain, getBrainReply };

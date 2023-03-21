@@ -1,3 +1,6 @@
+/**
+ * To get api string for prayer time
+ */
 export function getPrayerTimeApiUrl({
   latitude,
   longitude,
@@ -18,6 +21,9 @@ export function getPrayerTimeApiUrl({
   return `https://api.aladhan.com/v1/timings/${day}-${month}-${year}?method=${method}&latitude=${latitude}&longitude=${longitude}&iso8601=${isIso8601}`;
 }
 
+/**
+ * To get api string for youtube search
+ */
 export function getYouTubeSearchApiUrl({
   query,
   key = process.env.REACT_APP_YOUTUBE_API_KEY,

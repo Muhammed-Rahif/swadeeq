@@ -16,6 +16,11 @@ const config: CapacitorConfig = {
       launchFadeOutDuration: 1000,
       backgroundColor: "#00000000",
     },
+    LocalNotifications: {
+      smallIcon: "drawable-ldpi-icon",
+      iconColor: "#488AFF",
+      sound: "beep.wav",
+    },
   },
 };
 
