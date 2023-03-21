@@ -118,10 +118,6 @@ Major frameworks/libraries used to bootstrap the project.
 - [![Tailwind CSS][tailwind-css]][tailwind-css-url]
 - [![DaisyUi][daisyui]][daisyui-url]
 
-Ui inspired from https://dribbble.com/shots/17114459-Chatbot-your-personal-shopping-assistant
-
-<!-- https://cdn.dribbble.com/users/1147769/screenshots/17114459/media/e6719b6d98776cc75adcfcfb6812277d.png -->
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->

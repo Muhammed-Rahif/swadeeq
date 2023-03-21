@@ -2,73 +2,14 @@ import { atom, SetStateAction } from "jotai";
 import { THEME_STORE_KEY } from "../constants/store";
 import { atomStore } from "./store";
 
-type ThemeAtomType =
-  | "dark"
-  | "light"
-  | "cupcake"
-  | "bumblebee"
-  | "emerald"
-  | "corporate"
-  | "synthwave"
-  | "retro"
-  | "cyberpunk"
-  | "valentine"
-  | "halloween"
-  | "garden"
-  | "forest"
-  | "aqua"
-  | "lofi"
-  | "pastel"
-  | "fantasy"
-  | "wireframe"
-  | "black"
-  | "luxury"
-  | "dracula"
-  | "cmyk"
-  | "autumn"
-  | "business"
-  | "acid"
-  | "lemonade"
-  | "night"
-  | "coffee"
-  | "winter";
+type ThemeAtomType = "dark" | "light";
 
-export const allThemes = [
-  "dark",
-  "light",
-  "cupcake",
-  "bumblebee",
-  "emerald",
-  "corporate",
-  "synthwave",
-  "retro",
-  "cyberpunk",
-  "valentine",
-  "halloween",
-  "garden",
-  "forest",
-  "aqua",
-  "lofi",
-  "pastel",
-  "fantasy",
-  "wireframe",
-  "black",
-  "luxury",
-  "dracula",
-  "cmyk",
-  "autumn",
-  "business",
-  "acid",
-  "lemonade",
-  "night",
-  "coffee",
-  "winter",
-];
+export const allThemes = ["dark", "light"];
 
-const localTheme = localStorage.getItem(THEME_STORE_KEY) ?? "black";
+const localTheme = localStorage.getItem(THEME_STORE_KEY) ?? "dark";
 
 const themeAtomInit = atom<ThemeAtomType>(
-  allThemes.includes(localTheme) ? (localTheme as ThemeAtomType) : "black"
+  allThemes.includes(localTheme) ? (localTheme as ThemeAtomType) : "dark"
 );
 
 export const themeAtom = atom(
