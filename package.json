@@ -12,7 +12,7 @@
     "@capacitor/splash-screen": "^4.2.0",
     "@capacitor/status-bar": "4.1.1",
     "@craco/craco": "^7.0.0",
-    "@ionic/react": "^6.0.0",
+    "@ionic/react": "^7.0.2",
     "@ionic/react-router": "^6.0.0",
     "@nlpjs/basic": "^4.26.1",
     "@nlpjs/emoji": "^4.26.1",
